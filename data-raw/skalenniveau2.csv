@@ -1,0 +1,57 @@
+rows_id;rows;cols
+I1;Telefonnummern;Nominal
+I2;Familienstand;Nominal
+I3;Geschlecht;Nominal
+I4;Blutgruppe;Nominal
+I5;Kontonummer;Nominal
+I6;Postleitzahl;Nominal
+I7;Teile eines Satzes in der Grammatik wie Nomen, Verb, Präposition, Artikel;Nominal
+I8;Einteilung von Pflanzen in verschiedene Familien;Nominal
+I9;Buchstaben eines Alphabets;Nominal
+I10;Unterteilung von Steinen in Ablagerungs- Vulkan u. metamorphes Gestein;Nominal
+I11;Autobahn-Nummern (A10, A72);Nominal
+I12;Kleidergröße (S, M, L, XL);Ordinal
+I13;Erziehungsstil (antiautoritär, ein bisschen autoritär, sehr autoritär);Ordinal
+I14;Plätze in einem Sport-Wettbewerb;Ordinal
+I15;militärische Ränge;Ordinal
+I16;Pflegegrad eines Patienten;Ordinal
+I17;höchster erreichter Bildungsabschluss als Maß für Bildung;Ordinal
+I18;Schulnoten (sehr gut, gut, befriedigend, ausreichend, mangelhaft, ungenügend);Ordinal
+I19;soziale Schicht;Ordinal
+I20;Platzierungen beim 100-Meter-Lauf;Ordinal
+I21;Produktzufriedenheit (sehr zufrieden, eher zufrieden, eher unzufrieden, sehr unzufrieden);Ordinal
+I22;Top 10 Musik-Charts;Ordinal
+I23;Schweregrad einer Depression;Ordinal
+I24;Top 250 Liste der besten Filme auf IMDB;Ordinal
+I25;Mohs Härtetest für Mineralien (numerische Zuordnung basierend darauf, dass harte Stoffe weiche Stoffe ritzen);Ordinal
+I26;Energie-Label für Elektrogeräte (A, B, C, D, E, F, G);Ordinal
+I27;*subjektiv* wahrgenommene Lautstärke einer Waschmaschine basierend auf Angabe in deziBel;Ordinal
+I28;Schleudereffizienz einer Waschmaschine in den Abstufungen A, B, C, D, E, F, G;Ordinal
+I29;Nutri-Score als Maß dafür wie gesund Lebensmittel sind (A, B, C, D, E);Ordinal
+I30;Temperatur in Grad Celsius;Intervall
+I31;Temperatur in Grad Fahrenheit;Intervall
+I32;Jahreszahlen (nach Christi Geburt);Intervall
+I33;Körpergröße;Verhältnis
+I34;Temperatur in Grad Kelvin;Verhältnis
+I35;Körpergewicht;Verhältnis
+I36;Dauer der Schulzeit in Jahren;Verhältnis
+I37;Reaktionszeit in Sekunden bei einem kognitiven Test;Verhältnis
+I38;Schlafdeprivation in Stunden;Verhältnis
+I39;Stromverbrauch in kWh;Verhältnis
+I40;Wohnfläche in m²;Verhältnis
+I41;elektrische Leitfähigkeit der Haut (elektrodermale Aktivität) gemessen in Microsiemens;Verhältnis
+I42;Energieverbrauch einer Waschmaschine pro 100 Waschgänge in kWh;Verhältnis
+I43;Dauer des Energiesparprogramms einer Waschmaschine in Stunden;Verhältnis
+I44;Fassungsvermögen einer Waschmaschine in kg;Verhältnis
+I45;Anzahl der Psychologiestudierenden an Univesitäten;Absolut
+I46;Anzahl der Einwohner verschiedener Städte;Absolut
+I47;Anzahl von Bonbons in einer Tüte;Absolut
+I48;Seitenzahl verschiedener Bücher;Absolut
+I49;Anzahl an Feiertagen pro Jahr verschiedener Länder;Absolut
+I50;Anzahl der Dateien auf einem Datenträger;Absolut
+I51;Speicherplatz eines Datenträgers in Byte;Verhältnis
+I52;Länge verschiedener Youtube-Videos in Minuten;Verhältnis
+I53;Anzahl von Kommentaren unter einem Youtube-Video;Absolut
+I54;Anzahl an Likes eines Youtube-Videos;Absolut
+I55;subjektiv wahrgenommene Helligkeit von Leuchtmitteln basierend auf dem Lichtstrom in Lumen;Ordinal
+I56;Skalenniveaus (Nominal, Ordinal, Intervall, Verhältnis, Absolut);Ordinal
