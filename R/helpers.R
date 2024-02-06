@@ -76,3 +76,55 @@ render_html <- function(x){
     rmarkdown::render(htmlFile, "html_document")
     rstudioapi::viewer(htmlFile)
 }
+
+get_data <- function(...)
+{
+    e <- new.env()
+    name <- data(..., envir = e)[1]
+    e[[name]]
+}
+
+#
+# helper2 <- function(d, scale_levels) {
+#   sc <- new("SingleChoice",
+#     content = list("Was ist das höchste Skalenniveau für die folgende Variable: ",
+#                    d$Beispiel),
+#     shuffle = F, solution = d$korrekt,
+#     identifier = paste0("MT1_SK_", d$id),
+#     choices = scale_levels, points = 0.5,
+#     orientation = "horizontal"
+#   )
+#   sc
+# }
+#
+# skalenniveau <- function(sample_n = 5) {
+#   d <- read.csv2("/home/jt/programming/2023/mguru_student/skalenniveaus/skalenniveau2.csv")
+#   d <- d %>%
+#     sample_n(!!sample_n)
+#   scale_levels <- c("Nominal", "Ordinal", "Intervall", "Verhältnis", "Absolut")
+#   l <- purrr::transpose(d) # make data frame rows
+#   sc_list <- lapply(l, helper2, scale_levels)
+#
+#   sec <- new("AssessmentSection", title = "Skalenniveaus",
+#              assessment_item = sc_list, shuffle = TRUE,
+#              visible = FALSE, identifier = "skalenniveaus")
+#   sec
+# }
+
+mlehre <- function(which_exam = c("mlehreI", "mlehreII"), sections) {
+    new("AssessmentTestOpal",
+        identifier = paste(which_exam[1], substr(Sys.Date()), 1, 4),
+        section = sections,
+        academic_grading = TRUE,
+        grade_label = "VORLÄUFIGE Note: ",
+        calculator = "scientific-calculator",
+        files = get_supplement_paths())
+}
+
+mlehreI <- function(sections) {
+    mlehre("mlehreI", sections)
+}
+
+mlehreII <- function(sections) {
+    mlehre("mlehreII", sections)
+}
