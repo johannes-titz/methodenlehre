@@ -66,8 +66,11 @@ lagemaße_qdf <- function(x) {
     feedback <- tibble::lst(tiefe_med_q, tiefe_q25_q, tiefe_q75_q,
                             iqa_q, mw_q, var_q, sd_q, mad_q, range_q)
     feedback <- sapply(feedback, mathml::mathml)
-    solution_fb <- append(solution[-c(1:3)], tibble::lst(tiefe_med, tiefe_q25, tiefe_q75), 0)
-    feedback <- Map(function(x, y) paste(x, mathml(paste("=", y))), feedback, solution_fb)
+    solution_fb <- append(solution[-c(1:3)],
+                          tibble::lst(tiefe_med, tiefe_q25, tiefe_q75), 0)
+    feedback <- Map(function(x, y) paste(x, mathml(paste("=", y))),
+                    feedback,
+                    solution_fb)
 
     tolerance <- c(0, 0, 0, 0, 1, 1, 1, 1, 0)
     df <- as.data.frame(cbind(solution, question, tolerance, feedback))
@@ -143,11 +146,19 @@ lagemaße2 <- function(dv, story,
 
   res <- append(res, story, 0)
 
-  feedback <- paste0("Zunächst sollte die Variable sortiert werden:")
+  feedback1 <- paste0("Zunächst sollte die Variable sortiert und die Tiefe notiert werden:",
+                      kableExtra::kable_styling(
+                          full_width = F,
+                          position = "left",
+                          knitr::kable(t(cbind("Wert" = sort(dv),
+                                               "Tiefe" = seq(dv))), "html")
+                      ),
+                      "Nun lassen sich die Statistiken einfach berechnen. Beachten Sie, dass bei dem Median und den Quartilen die Tiefe berechnet wird. Die finale Lösung müssen Sie dann bei der Tiefe der sortierten Variable ablesen.")
   feedback <- paste("<summary>", qdf$question, "</summary>", "<p>",
                     qdf$feedback, "</p>")
-  feedback <- paste("<details open='true'>", feedback, "</details>", collapse = "")
-  #content <- append(res, feedback)
+  # use <details open> to open it
+  feedback <- paste("<details>", feedback, "</details>", collapse = "")
+  feedback <- paste(feedback1, feedback, collapse = "")
   feedback <- new("ModalFeedback", content = list(feedback))
 
   exercise <- new("Entry", content = res,
