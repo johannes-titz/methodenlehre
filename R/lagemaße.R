@@ -147,10 +147,10 @@ lagemaße2 <- function(dv, story,
   feedback <- paste("<summary>", qdf$question, "</summary>", "<p>",
                     qdf$feedback, "</p>")
   feedback <- paste("<details open='true'>", feedback, "</details>", collapse = "")
-  content <- append(res, feedback)
+  #content <- append(res, feedback)
   feedback <- new("ModalFeedback", content = list(feedback))
 
-  exercise <- new("Entry", content = content,
+  exercise <- new("Entry", content = res,
                   identifier = identifier,
                   feedback = list(feedback))
   exercise
