@@ -4,7 +4,6 @@ get_supplement_paths <- function() {
     dir(path, full.names = T)
 }
 
-
 render_qtijs <- function(question) {
     test <- new("AssessmentTest", section = list(section), identifier = "qtijs")
     createQtiTest(test, dir = "qtijs.zip")
@@ -36,15 +35,17 @@ df2sc <- function(file) {
 #' Create sc table for df that has the same values in cols for each row
 #'
 #' @param df with values rows, cols, rows_id and cols_id
-#'
+#' @return OneInRowTable item object
 #' @details
 #' rows is what will be shown in the rows sc table; if you want a specific order
 #' cols should be a factor
 #'
-df2sc2 <- function(df, identifier, title = identifier, shuffle = T) {
+df2sc2 <- function(df, identifier, title = identifier, shuffle = T,
+                   story) {
  df$cols <- as.factor(df$cols)
  df$cols_id <- as.factor(df$cols_id)
  mt <- new("OneInRowTable",
+           content = list(story),
            rows = df$rows,
            rows_identifiers = df$rows_id,
            cols = levels(df$cols), # important to use levels!
