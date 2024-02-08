@@ -2,7 +2,7 @@
 #'
 #' @param x This is the variable to create questions for.
 #' @return data frame containing all information for questions for qti
-#'
+#' @import mathml
 #' @export
 lagemaße_qdf <- function(x) {
     # todo: generate feedback
