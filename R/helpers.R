@@ -85,32 +85,24 @@ get_data <- function(...)
     e[[name]]
 }
 
-#
-# helper2 <- function(d, scale_levels) {
-#   sc <- new("SingleChoice",
-#     content = list("Was ist das höchste Skalenniveau für die folgende Variable: ",
-#                    d$Beispiel),
-#     shuffle = F, solution = d$korrekt,
-#     identifier = paste0("MT1_SK_", d$id),
-#     choices = scale_levels, points = 0.5,
-#     orientation = "horizontal"
-#   )
-#   sc
-# }
-#
-# skalenniveau <- function(sample_n = 5) {
-#   d <- read.csv2("/home/jt/programming/2023/mguru_student/skalenniveaus/skalenniveau2.csv")
-#   d <- d %>%
-#     sample_n(!!sample_n)
-#   scale_levels <- c("Nominal", "Ordinal", "Intervall", "Verhältnis", "Absolut")
-#   l <- purrr::transpose(d) # make data frame rows
-#   sc_list <- lapply(l, helper2, scale_levels)
-#
-#   sec <- new("AssessmentSection", title = "Skalenniveaus",
-#              assessment_item = sc_list, shuffle = TRUE,
-#              visible = FALSE, identifier = "skalenniveaus")
-#   sec
-# }
+
+df2sc2 <- function(d, question, choices = levels(d$cols),
+                   shuffle = T) {
+    sc <- function(d) {
+        new("SingleChoice",
+            content = list(question, d$rows),
+            shuffle = shuffle,
+            solution = d$cols,
+            identifier = d$rows_id,
+            choices = choices,
+            points = 0.5,
+            orientation = "horizontal"
+        )
+    }
+    l <- purrr::transpose(d) # make data frame rows
+    sc_list <- lapply(l, sc)
+    sc_list
+}
 
 mlehre <- function(which_exam = c("mlehreI", "mlehreII"), sections) {
     new("AssessmentTestOpal",
