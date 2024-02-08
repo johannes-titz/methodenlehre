@@ -4,12 +4,6 @@ get_supplement_paths <- function() {
     dir(path, full.names = T)
 }
 
-render_qtijs <- function(question) {
-    test <- new("AssessmentTest", section = list(section), identifier = "qtijs")
-    createQtiTest(test, dir = "qtijs.zip")
-    render_zip("qtijs.zip")
-}
-
 #' df2gap
 #'
 #' Takes dataframe of questions and transforms it to NumericGap qti.
@@ -27,11 +21,12 @@ df2gap <- function(df) {
          "</p>")
 }
 
+#' create sc table for df that has different values in cols for each row
+#'
 df2sc <- function(file) {
 
 }
 
-#'
 #' Create sc table for df that has the same values in cols for each row
 #'
 #' @param df with values rows, cols, rows_id and cols_id
@@ -40,7 +35,7 @@ df2sc <- function(file) {
 #' rows is what will be shown in the rows sc table; if you want a specific order
 #' cols should be a factor
 #'
-df2sc2 <- function(df, identifier, title = identifier, shuffle = T,
+df2sctable2 <- function(df, identifier, title = identifier, shuffle = T,
                    story) {
  df$cols <- as.factor(df$cols)
  df$cols_id <- as.factor(df$cols_id)
