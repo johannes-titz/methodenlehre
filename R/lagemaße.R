@@ -3,6 +3,7 @@
 #' @param x This is the variable to create questions for.
 #' @return data frame containing all information for questions for qti
 #' @import mathml
+#' @importFrom stats var
 #' @export
 lagemaße_qdf <- function(x) {
     # todo: generate feedback
@@ -91,6 +92,10 @@ lagemaße_qdf <- function(x) {
 #' @param seed seed to reproduce data set
 #'
 #' @return list with vector and story
+#'
+#' @importFrom tibble lst
+#' @importFrom stats na.omit
+#'
 #' @export
 lagemaße_davis <- function(dv = NULL,
                            n = NULL,
@@ -122,6 +127,11 @@ lagemaße_davis <- function(dv = NULL,
 #' @param identifier identifier for assessment item
 #'
 #' @return Entry object of qti class
+#'
+#' @importFrom dplyr filter
+#' @importFrom methods new
+#' @importFrom knitr kable
+#' @importFrom kableExtra kable_styling
 #'
 #' @details
 #' Note that identifiers for specific questions are automatically created.
@@ -175,8 +185,8 @@ lagemaße_question <- function() {unlist(lagemaße_qdf(1:10)$question)}
 #'
 #' lagemaße creates a qti Entry exercise for descriptive statistics
 #'
-#' @study list with elements vector, story and seed
-#' @question question data frame
+#' @param study list with elements vector, story and seed
+#' @param question question data frame
 #'
 #' @return Entry object of qti class
 #'

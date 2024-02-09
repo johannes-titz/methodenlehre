@@ -13,7 +13,17 @@ RoxygenNote: 7.3.1
 Imports: 
     carData,
     dplyr,
-    qti
+    magrittr,
+    methods,
+    qti,
+    methods,
+    tibble,
+    fs,
+    knitr,
+    kableExtra,
+    purrr,
+    rmarkdown,
+    rstudioapi
 Depends:
     R (>= 4.3),
     mathml (>= 1.2)

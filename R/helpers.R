@@ -1,4 +1,5 @@
 
+#' @importFrom fs path_package
 get_supplement_paths <- function() {
     path <- fs::path_package("supplements", package = "methodenlehre")
     dir(path, full.names = T)
@@ -63,6 +64,8 @@ equal_to <- function(g, h) {
     substitute(y == x, list(y=h, x=g))
 }
 
+#' @importFrom rstudioapi viewer
+#' @importFrom rmarkdown render
 render_html <- function(x){
     dir <- tempfile()
     dir.create(dir)
@@ -73,6 +76,8 @@ render_html <- function(x){
     rstudioapi::viewer(htmlFile)
 }
 
+#'
+#' @importFrom utils data
 get_data <- function(...)
 {
     e <- new.env()
@@ -80,7 +85,8 @@ get_data <- function(...)
     e[[name]]
 }
 
-
+#' @importFrom purrr transpose
+#'
 df2sc2 <- function(d, question, choices = levels(d$cols),
                    shuffle = T) {
     sc <- function(d) {

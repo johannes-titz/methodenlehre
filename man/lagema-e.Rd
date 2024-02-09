@@ -6,6 +6,11 @@
 \usage{
 lagemaße(study = lagemaße_davis(), question = lagemaße_question())
 }
+\arguments{
+\item{study}{list with elements vector, story and seed}
+
+\item{question}{question data frame}
+}
 \value{
 Entry object of qti class
 }
