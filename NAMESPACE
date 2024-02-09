@@ -2,6 +2,7 @@
 
 export("%>%")
 export(df2gap)
+export(get_supplement_paths)
 export(lagemaße)
 export(lagemaße_davis)
 export(lagemaße_klausur)
