@@ -138,3 +138,10 @@ webshot <- function(url, file, width = 800, height = 2000) {
                 " --full-page")
   )
 }
+
+#' @export
+mycor <- function(x, y) {
+  if (sd(x) == 0) return(NA)
+  if (sd(y) == 0) return(NA)
+  cor(x, y)
+}
