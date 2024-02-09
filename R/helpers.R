@@ -1,5 +1,8 @@
-
+#'
+#' Gets all files in inst/supplements of methodenlehre package
+#'
 #' @importFrom fs path_package
+#' @export
 get_supplement_paths <- function() {
     path <- fs::path_package("supplements", package = "methodenlehre")
     dir(path, full.names = T)
