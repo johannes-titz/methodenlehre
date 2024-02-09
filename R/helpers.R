@@ -125,3 +125,16 @@ mlehreI <- function(sections) {
 mlehreII <- function(sections) {
     mlehre("mlehreII", sections)
 }
+
+#' take screenshot of opal website with capture-website-cli
+#' requires capture-website-cli on system!
+webshot <- function(url, file, width = 800, height = 2000) {
+  system(paste0("npx capture-website-cli ", url,
+                " --element='.content-container-inner'",
+                " --output=", file,
+                " --width=", width,
+                " --height=", height,
+                " --overwrite",
+                " --full-page")
+  )
+}
