@@ -39,7 +39,7 @@ df2sc <- function(file) {
 #' rows is what will be shown in the rows sc table; if you want a specific order
 #' cols should be a factor
 #'
-df2sctable2 <- function(df, identifier, title = identifier, shuffle = T,
+df2sctable <- function(df, identifier, title = identifier, shuffle = T,
                    story) {
  df$cols <- as.factor(df$cols)
  df$cols_id <- as.factor(df$cols_id)

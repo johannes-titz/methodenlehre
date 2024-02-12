@@ -12,7 +12,7 @@
 skalenniveau <- function(n = 2) {
   sn_data <- get_data("skalenniveau")
   sn_data <- sn_data[sample(seq(nrow(sn_data)), n), ]
-  df2sctable2(sn_data, identifier = "skalenniveau", title = "Skalenniveau",
+  df2sctable(sn_data, identifier = "skalenniveau", title = "Skalenniveau",
          story = "<p>Wählen Sie das höchstmögliche Skalenniveau für folgende Variablen aus.</p>")
 }
 
@@ -27,7 +27,7 @@ skalenniveau_klausur <- function(n = 2) {
   sn_data <- sn_data %>%
       dplyr::filter(r_it >= 0.3, P >= 0.1, P <= 0.9)
   sn_data <- sn_data[sample(seq(nrow(sn_data)), n), ]
-  df2sctable2(sn_data, identifier = "skalenniveau", title = "Skalenniveau",
+  df2sctable(sn_data, identifier = "skalenniveau", title = "Skalenniveau",
          story = "<p>Wählen Sie das höchstmögliche Skalenniveau für folgende Variablen aus.</p>",
          shuffle = F)
 }
