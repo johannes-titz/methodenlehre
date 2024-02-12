@@ -25,10 +25,11 @@ skalenniveau <- function(n = 2) {
 skalenniveau_klausur <- function(n = 2) {
   sn_data <- get_data("skalenniveau")
   sn_data <- sn_data %>%
-      filter(rows_id %in% paste0("I", c(12, 25, 27, 30, 37, 40, 42, 46, 49, 51, 52, 53)))
+      dplyr::filter(r_it >= 0.3, P >= 0.1, P <= 0.9)
   sn_data <- sn_data[sample(seq(nrow(sn_data)), n), ]
   df2sctable2(sn_data, identifier = "skalenniveau", title = "Skalenniveau",
-         story = "<p>Wählen Sie das höchstmögliche Skalenniveau für folgende Variablen aus.</p>")
+         story = "<p>Wählen Sie das höchstmögliche Skalenniveau für folgende Variablen aus.</p>",
+         shuffle = F)
 }
 
 #' Exercise Skalenniveau
