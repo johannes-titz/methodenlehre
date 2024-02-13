@@ -74,7 +74,8 @@ lagemaße_qdf <- function(x) {
                     solution_fb)
 
     tolerance <- c(0, 0, 0, 0, 1, 1, 1, 1, 0)
-    df <- as.data.frame(cbind(solution, question, tolerance, feedback))
+    df <- as.data.frame(cbind(solution, question, tolerance, feedback,
+                              tolerance_type = "relative"))
     df
 }
 
@@ -108,12 +109,12 @@ lagemaße_davis <- function(dv = NULL,
     Davis <- carData::Davis
     Davis <- Davis %>%
         na.omit() %>%
-        mutate(Körpergröße = weight - repwt,
+        dplyr::mutate(Körpergröße = weight - repwt,
                Körpergewicht = height - repht) %>%
         dplyr::filter(abs(Körpergewicht) <= 10, abs(Körpergröße) <= 10)
     vector <- Davis %>%
-        sample_n(n) %>%
-        pull(dv)
+        dplyr::sample_n(n) %>%
+        dplyr::pull(dv)
     story <- paste0("<p>Davis (1990) verglich die Körperwahrnehmung von Personen, die keinen oder viel Sport trieben (N=200). Unter anderem erfasste Davis die berichtete Körpergröße und die tatsächliche Körpergröße, sowie das berichtete Körpergewicht und das tatsächliche Körpergewicht. Aus dem Datensatz wurden zufällig ", length(vector), " Personen gezogen. Sie schauen sich die Variable ", names(dv), " an und bestimmen die Differenz zwischen tatsächlichem und berichtetem Wert.</p><p>Differenzen: ", paste0(vector, collapse = " "), "</p><p> Nun wollen Sie einige typische deskriptive Statistiken berechnen. Runden Sie, wenn nötig, auf 1 Dezimalstelle.</p>")
     tibble::lst(vector, story, seed, name = "Davis")
 }
@@ -149,11 +150,7 @@ lagemaße2 <- function(dv, story,
   qdf <- lagemaße_qdf(dv)
   qdf <- qdf %>%
       dplyr::filter(question %in% !!question)
-  rows <- split(qdf, 1:nrow(qdf))
-
-
-  res <- unlist(lapply(rows, df2gap), use.names = F)
-
+  res <- unlist(df2gap(qdf), use.names = F)
   res <- append(res, story, 0)
 
   feedback1 <- paste0("Zunächst sollte die Variable sortiert und die Tiefe notiert werden:",
@@ -208,7 +205,7 @@ lagemaße <- function(study = lagemaße_davis(), question = lagemaße_question()
 #'
 #' @export
 lagemaße_klausur <- function(seed, question = lagemaße_question()[c(1:3, sample(4:5, 1))]) {
-    lapply(seed, function(x) lagemaße(lagemaße_davis(seed = x), question))
+  lapply(seed, function(x) lagemaße(lagemaße_davis(seed = x), question))
 }
 
 #'
