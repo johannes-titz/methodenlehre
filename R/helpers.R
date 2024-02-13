@@ -28,6 +28,7 @@ df2gap <- function(df) {
              tolerance_type = row$tolerance_type),
          "</p>")
   }
+  # this is somewhat more robust
   df$id <- row.names(df)
   rows <- purrr::transpose(df)
   res <- lapply(rows, helper)
