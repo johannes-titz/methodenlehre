@@ -18,18 +18,20 @@ get_supplement_paths <- function() {
 #' @return list of NumericGap objects wrapped in html paragraphs.
 #' @export
 df2gap <- function(df) {
-  helper <- function(df) {
-    list("<p>", paste0(df$question, ": "),
+  helper <- function(row) {
+    list("<p>", paste0(row$question, ": "),
          new("NumericGap",
-             solution = as.numeric(df$solution),
-             response_identifier = rownames(df),
-             expected_length = nchar(df$solution),
-             tolerance = as.numeric(df$tolerance),
-             tolerance_type = df$tolerance_type),
+             solution = as.numeric(row$solution),
+             response_identifier = row$id,
+             expected_length = nchar(row$solution),
+             tolerance = as.numeric(row$tolerance),
+             tolerance_type = row$tolerance_type),
          "</p>")
   }
-  rows <- split(df, 1:nrow(df))
+  df$id <- row.names(df)
+  rows <- purrr::transpose(df)
   res <- lapply(rows, helper)
+  res
 }
 
 #' create sc table for df that has different values in cols for each row
