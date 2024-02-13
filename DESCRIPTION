@@ -23,7 +23,9 @@ Imports:
     kableExtra,
     purrr,
     rmarkdown,
-    rstudioapi
+    rstudioapi,
+    data.tree,
+    DiagrammeR
 Depends:
     R (>= 4.3),
     mathml (>= 1.2)
