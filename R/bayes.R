@@ -146,12 +146,11 @@ bayes_feedback <- function(example) {
 
 #' Bayes exercise
 #'
-#' Creates a bayes exercise in qti format
+#' Creates one bayes exercise in qti format
 #'
 #' @param seed random seed
 #' @return qti object of type Entry
-#' @export
-bayes <- function(seed = sample.int(1e3, 1)) {
+bayes_one <- function(seed = sample.int(1e3, 1)) {
   ex <- bayes_example(seed = seed)
   story <- bayes_story(ex)
   questions <- bayes_qdf(ex)
@@ -160,6 +159,18 @@ bayes <- function(seed = sample.int(1e3, 1)) {
       content = c(story, feedback),
       feedback = list(new("ModalFeedback", content = list(feedback))))
 }
+
+#' Bayes exercise
+#'
+#' Creates one bayes exercise in qti format
+#'
+#' @param seed random seed
+#' @return qti object of type Entry
+#' @export
+bayes <- function(seed = sample.int(1e3, 1)) {
+  lapply(seed, bayes_one)
+}
+
 #
 # bayes_studis <- function(seeds = 1:20) {
 #   exercises <- lapply(seeds, bayes)
