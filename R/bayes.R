@@ -95,6 +95,7 @@ bayes_plot <- function(example) {
   output <- substring(output, 2)
   output <- gsub("levelName", "#Personen", output)
   paste("<pre>", paste(output, collapse = "<br/>"), "</pre>", collapse = "")
+  svg_string
 }
 
 #' generate story for bayes exercise
@@ -149,13 +150,14 @@ bayes_feedback <- function(example) {
 #'
 #' @param seed random seed
 #' @return qti object of type Entry
+#' @export
 bayes <- function(seed = sample.int(1e3, 1)) {
   ex <- bayes_example(seed = seed)
   story <- bayes_story(ex)
   questions <- bayes_qdf(ex)
   feedback <- bayes_feedback(ex)
   new("Entry", identifier = paste0("bayesS", seed), title = "Bayes",
-      content = story,
+      content = c(story, feedback),
       feedback = list(new("ModalFeedback", content = list(feedback))))
 }
 #
