@@ -96,7 +96,6 @@ bayes_plot <- function(example) {
   output <- substring(output, 2)
   output <- gsub("levelName", "#Personen", output)
   paste("<pre>", paste(output, collapse = "<br/>"), "</pre>", collapse = "")
-  svg_string
 }
 
 #' generate story for bayes exercise
