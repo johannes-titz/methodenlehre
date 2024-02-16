@@ -23,7 +23,7 @@ df2gap <- function(df) {
          new("NumericGap",
              solution = as.numeric(row$solution),
              response_identifier = row$id,
-             expected_length = nchar(row$solution),
+             expected_length = ifelse(is.null(row$solution), nchar(row$solution.base_rate), row$expected_length),
              tolerance = as.numeric(row$tolerance),
              tolerance_type = row$tolerance_type),
          "</p>")

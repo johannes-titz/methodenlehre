@@ -55,7 +55,8 @@ bayes_qdf <- function(solution) {
     label,
     "Nun wollen Sie abschließend für Ihren Bericht abschätzen, wie wahrscheinlich es ist, dass eine als geeignet eingeschätzte Führungskraft, tatsächlich geeignet ist (in %)")
   df <- data.frame(solution = solution, tolerance = 1,
-                   tolerance_type = "absolute", question = label)
+                   tolerance_type = "absolute", question = label,
+                   expected_length = 2)
   row.names(df) <- names(label)
   df
 }
