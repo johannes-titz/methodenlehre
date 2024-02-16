@@ -4,7 +4,7 @@
 \alias{bayes_qdf}
 \title{generate questions for bayes}
 \usage{
-bayes_qdf(example)
+bayes_qdf(solution)
 }
 \arguments{
 \item{example}{bayes_example list}
