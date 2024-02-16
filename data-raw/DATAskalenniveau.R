@@ -20,7 +20,7 @@ sk2 <- sk %>%
 
 sk3 <- sk2 %>%
   group_by(rows_id) %>%
-  summarize(r_it = mycor(score_candidate, score-score_candidate), P = mean(score_candidate)/mean(score_max), dur = mean(duration), n = n())
+  summarize(r_it = cor(score_candidate, score-score_candidate), P = mean(score_candidate)/mean(score_max), dur = mean(duration), n = n())
 
 skalenniveau <- merge(skalenniveau, sk3, by = "rows_id")
 
