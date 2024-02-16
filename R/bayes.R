@@ -157,7 +157,7 @@ bayes_one <- function(seed = sample.int(1e3, 1)) {
   questions <- bayes_qdf(ex)
   feedback <- bayes_feedback(ex)
   new("Entry", identifier = paste0("bayesS", seed), title = "Bayes",
-      content = c(story, feedback),
+      content = c(story),
       feedback = list(new("ModalFeedback", content = list(feedback))))
 }
 
@@ -169,7 +169,9 @@ bayes_one <- function(seed = sample.int(1e3, 1)) {
 #' @return qti object of type Entry
 #' @export
 bayes <- function(seed = sample.int(1e3, 1)) {
-  lapply(seed, bayes_one)
+  b <- lapply(seed, bayes_one)
+  if (length(b) == 1) b <- b[[1]]
+  b
 }
 
 #
