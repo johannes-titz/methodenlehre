@@ -50,11 +50,12 @@ df2sc <- function(file) {
 #' cols should be a factor
 #'
 df2sctable <- function(df, identifier, title = identifier, shuffle = T,
-                   story) {
+                       story, feedback = "") {
  df$cols <- as.factor(df$cols)
  df$cols_id <- as.factor(df$cols_id)
  mt <- new("OneInRowTable",
            content = list(story),
+           feedback = list(new("ModalFeedback", content = list(feedback))),
            rows = df$rows,
            rows_identifiers = df$rows_id,
            cols = levels(df$cols), # important to use levels!

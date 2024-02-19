@@ -1,0 +1,7 @@
+id,story,Beta,Power,Konfidenz,feedback
+sp+,die Stichprobengröße erhöht,wird kleiner,wird größer,bleibt gleich,"Die Verteilungen der H0 und H1 werden schmaler, Alpha bleibt jedoch gleich und das Kriterium rutscht somit weiter nach links. Dadurch wird Beta kleiner und die Power größer. Die Konfidenz bleibt gleich."
+sp-,die Stichprobengröße verkleinert,wird größer,wird kleiner,bleibt gleich,"Die Verteilungen der H0 und H1 werden breiter, Alpha bleibt jedoch gleich und das Kriterium rutscht somit weiter nach rechts. Dadurch wird Beta größer und die Power kleiner. Die Konfidenz bleibt gleich."
+e+,den Effekt in der Population vergrößert,wird kleiner,wird größer,bleibt gleich,"Die Verteilungen der H0 und H1 liegen weiter entfernt voneinander, das Kriterium ändert sich jedoch nicht. Somit wird Beta kleiner und die Power größer. Die Konfidenz ändert sich nicht."
+e-,den Effekt in der Population verkleinert,wird größer,wird kleiner,bleibt gleich,"Die Verteilungen der H0 und H1 liegen näher beiianander, das Kriterium ändert sich jedoch nicht. Somit wird Beta größer und die Power kleiner. Die Konfidenz ändert sich nicht."
+a+,Alpha verkleinert,wird größer,wird kleiner,wird größer,"Die Verteilungen der H0 und H1 bleiben gleich, das Kriterium verschiebt sich jedoch nach rechts. Somit wird die Konfidenz größer, Beta größer und die Power kleiner."
+a-,Alpha vergrößert,wird kleiner,wird größer,wird kleiner,"Die Verteilungen der H0 und H1 bleiben gleich, das Kriterium verschiebt sich jedoch nach links. Somit wird die Konfidenz kleiner, Beta kleiner und die Power größer."
