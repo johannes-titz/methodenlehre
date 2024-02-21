@@ -139,15 +139,19 @@ mlehreII <- function(sections) {
 
 #' take screenshot of opal website with capture-website-cli
 #' requires capture-website-cli on system!
-webshot <- function(url, file, width = 800, height = 2000) {
+webshot <- function(url, file, width = 800, height = 600, quality = 0.95,
+                    fullpage = T) {
   system(paste0("npx capture-website-cli ", url,
                 " --element='.content-container-inner'",
                 " --output=", file,
                 " --width=", width,
+                " --quality=", quality,
                 " --height=", height,
                 " --overwrite",
-                " --full-page")
+                ifelse(fullpage, " --full-page", ""))
   )
+  # remove whitespace
+  system(paste("convert -trim ", file, file))
 }
 
 #' @export
