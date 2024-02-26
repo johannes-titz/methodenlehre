@@ -15,7 +15,7 @@ Imports:
     dplyr,
     magrittr,
     methods,
-    qti,
+    rqti,
     methods,
     tibble,
     fs,

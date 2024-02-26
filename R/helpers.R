@@ -16,6 +16,7 @@ get_supplement_paths <- function() {
 #' response_identifier, which is taken from the rownames.
 #'
 #' @return list of NumericGap objects wrapped in html paragraphs.
+#' @import rqti
 #' @export
 df2gap <- function(df) {
   helper <- function(row) {
