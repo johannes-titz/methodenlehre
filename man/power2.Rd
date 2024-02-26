@@ -7,14 +7,12 @@
 power2(case = sample(power2_cases(), 1))
 }
 \arguments{
-\item{case}{which case to construct, see get_data(power2), column id, default
+\item{case}{which case to construct, see get_data(power2_data), column id, default
 is one random case}
 }
 \value{
 OneInRowTable
 }
 \description{
-In this single-choice table exercise, power2, you are presented with six
-different scenarios related to a significance test setup. Your task is to
 identify the impact on specific parameters when one of them is altered.
 }
