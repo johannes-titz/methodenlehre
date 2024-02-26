@@ -139,19 +139,33 @@ mlehreII <- function(sections) {
 
 #' take screenshot of opal website with capture-website-cli
 #' requires capture-website-cli on system!
-webshot <- function(url, file, width = 800, height = 600, quality = 0.95,
-                    fullpage = T) {
-  system(paste0("npx capture-website-cli ", url,
-                " --element='.content-container-inner'",
-                " --output=", file,
-                " --width=", width,
-                " --quality=", quality,
-                " --height=", height,
-                " --overwrite",
-                ifelse(fullpage, " --full-page", ""))
+webshot <- function(url, file, width = 800, height = 600, quality = 1,
+                    fullpage = T, selector, trim = T) {
+  p <- processx::process$new("npx",
+                        c("capture-website-cli",
+                          url,
+                          paste0("--element=", selector),
+                          #"--delay 2",
+                          paste0("--output=", file),
+                          paste0("--width=", width),
+                          paste0("--quality=", quality),
+                          paste0("--height=", height),
+                          "--overwrite",
+                          ifelse(fullpage, "--full-page", "")),
   )
+  p$wait(10000)
+  p$kill()
   # remove whitespace
-  system(paste("convert -trim ", file, file))
+  if (trim) system(paste("convert -trim ", file, file))
+  #system(paste0("convert -resize ", width, "x", height, " ", file, " ", file))
+}
+
+webshot_qtijs <- function(url, file) {
+  webshot(url, file, selector = "body", trim = F)
+}
+webshot_opal <- function(url, file) {
+  webshot(url, file, selector = ".content-container-inner",
+          fullpage = T)
 }
 
 #' @export
