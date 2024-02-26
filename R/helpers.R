@@ -46,9 +46,11 @@ df2sc <- function(file) {
 #'
 #' @param df with values rows, cols, rows_id and cols_id
 #' @return OneInRowTable item object
-#' @details
-#' rows is what will be shown in the rows sc table; if you want a specific order
-#' cols should be a factor
+#' @details rows is what will be shown in the rows sc table; if you want a
+#' specific order cols should be a factor
+#'
+#' Important: To have cols as pure distractors (never correct), cols and cols_id
+#' should be a factor with additional levels!
 #'
 df2sctable <- function(df, identifier, title = identifier, shuffle = T,
                        story, feedback = "") {
