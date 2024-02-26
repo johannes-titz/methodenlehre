@@ -4,7 +4,14 @@
 \alias{df2sctable}
 \title{Create sc table for df that has the same values in cols for each row}
 \usage{
-df2sctable(df, identifier, title = identifier, shuffle = T, story)
+df2sctable(
+  df,
+  identifier,
+  title = identifier,
+  shuffle = T,
+  story,
+  feedback = ""
+)
 }
 \arguments{
 \item{df}{with values rows, cols, rows_id and cols_id}

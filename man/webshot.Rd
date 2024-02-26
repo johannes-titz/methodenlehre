@@ -5,7 +5,16 @@
 \title{take screenshot of opal website with capture-website-cli
 requires capture-website-cli on system!}
 \usage{
-webshot(url, file, width = 800, height = 2000)
+webshot(
+  url,
+  file,
+  width = 800,
+  height = 600,
+  quality = 1,
+  fullpage = T,
+  selector,
+  trim = T
+)
 }
 \description{
 take screenshot of opal website with capture-website-cli
