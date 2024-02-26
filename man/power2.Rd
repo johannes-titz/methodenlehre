@@ -4,7 +4,7 @@
 \alias{power2}
 \title{Power2 exercise}
 \usage{
-power2(case = sample(get_data(power2)$id, 1))
+power2(case = sample(power2_cases(), 1))
 }
 \arguments{
 \item{case}{which case to construct, see get_data(power2), column id, default

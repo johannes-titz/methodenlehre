@@ -10,7 +10,7 @@
 #' @return OneInRowTable
 #'
 #' @export
-power2 <- function(case = sample(get_data(power2)$id, 1)) {
+power2 <- function(case = sample(power2_cases(), 1)) {
   d <- get_data("power2")
   selection <- d %>%
     dplyr::filter(id == case)
@@ -22,4 +22,13 @@ power2 <- function(case = sample(get_data(power2)$id, 1)) {
   selection <- na.omit(selection)
   df2sctable(selection, "power2", shuffle = F, story = intro,
              feedback = d$feedback[1])
+}
+
+#' Show all cases of power2
+#'
+#' A helper that returns ids of power2 to ease selection
+#'
+#' @export
+power2_cases <- function() {
+  unique(get_data(power2)$id)
 }
