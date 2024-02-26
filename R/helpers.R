@@ -156,7 +156,7 @@ webshot <- function(url, file, width = 800, height = 600, quality = 1,
   p$wait(10000)
   p$kill()
   # remove whitespace
-  if (trim) system(paste("convert -trim ", file, file))
+  if (trim) system(paste("mogrify -trim ", file))
   #system(paste0("convert -resize ", width, "x", height, " ", file, " ", file))
 }
 
