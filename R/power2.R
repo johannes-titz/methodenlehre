@@ -20,5 +20,6 @@ power2 <- function(case = sample(get_data(power2)$id, 1)) {
   intro <- c(intro, paste0("<p>Was passiert wenn man <b>", selection$story[1],
                            "</b>?</p>"))
   selection <- na.omit(selection)
-  df2sctable(selection, "power2", shuffle = F, story = intro)
+  df2sctable(selection, "power2", shuffle = F, story = intro,
+             feedback = d$feedback[1])
 }
