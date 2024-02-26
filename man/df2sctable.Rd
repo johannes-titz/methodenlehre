@@ -23,6 +23,9 @@ OneInRowTable item object
 Create sc table for df that has the same values in cols for each row
 }
 \details{
-rows is what will be shown in the rows sc table; if you want a specific order
-cols should be a factor
+rows is what will be shown in the rows sc table; if you want a
+specific order cols should be a factor
+
+Important: To have cols as pure distractors (never correct), cols and cols_id
+should be a factor with additional levels!
 }
