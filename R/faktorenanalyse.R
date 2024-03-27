@@ -13,7 +13,8 @@ fa_data <- function(n_factors_model = sample(2:6, 1),
   communalities <- runif(n_items, 0.5, 0.8)
   out <-  fungible::simFA(Model = list(NFac = n_items,
                                        NItemPerFac=n_items_per_fac),
-              MonteCarlo = list(NSamples = 1, Raw = TRUE),
+              MonteCarlo = list(NSamples = 1, Raw = TRUE,
+                                SampleSize = sample(250:1000, 1)),
               Loadings = list(h2 = communalities),
               CrossLoadings = list(ProbCrossLoad = 1E-12,
                    CrossLoadRange = c(0,0),
@@ -52,49 +53,61 @@ fa_table_parallel <- function(fa_parallel) {
   kableExtra::kable_styling(
     full_width=F, position = "left",
     kable_input = kable(round(tbl, 2), booktabs = T,
-                        caption = "Faktoren-Lösung",
+                        caption = "Tabelle Parallel-Analyse",
                         col.names = c("Eigenwert", "Mittelwert Eigenwert PA",
                                       "95 % Perzentil Eigenwert PA"))
   )
 }
 
 fa_table2 <- function(myfa) {
+  rot_loadings <- myfa$rot_loadings
+  rot_loadings <- rot_loadings[, order(colnames(rot_loadings))]
   output <- round(cbind(`Item Nummer` = 1:length(myfa$h2),
-                        myfa$rot_loadings), 3)
+                        rot_loadings), 3)
   row.names(output) <- NULL
   tbl <-tbl <- kableExtra::kable_styling(
-    kable_input = kable(output, booktabs = T, caption = "Faktoren-Lösung"),
+    kable_input = kable(output, digits = 2, booktabs = T, caption = "Tabelle Faktoren-Lösung"),
     full_width = F,
     position = "left")
   tbl
 }
 
-faktorenanalyse <- function() {
+faktorenanalyse <- function(seed = sample.int(1e5, 1)) {
+  set.seed(seed)
   fa <- fa_example()
-  p1 <- glue::glue("<p>Der berühmte Psychologe Thurstone hat im Jahr 1941 eine Studie zu Intelligenz durchgeführt, die Sie versuchen zu replizieren. Sie erheben Daten zu verschiedenen Intelligenz-Aufgaben bei 250 Probanden und möchten diese mit Hilfe einer Faktorenanalyse auswerten.</p><p>
+  eigenvalues <- kableExtra::kable_styling(
+    kable_input = kable(fa$fa$vars_accounted_rot[1,], booktabs = T,
+                        caption = "Tabelle Eigenwerte",
+                        digits = 2,
+                        col.names = c("Faktor", "Eigenwert")), full_width = F,
+    position = "left")
 
-Die folgende Tabelle zeigt die Eigenwerte und das 95%-Quantil der zufällig erzeugten Eigenwerte einer Parallelanalyse:</p>
+  p1 <- glue::glue("<p>Der berühmte Psychologe Thurstone hat im Jahr 1941 eine Studie zu Intelligenz durchgeführt, die Sie versuchen zu replizieren. Sie erheben Daten zu verschiedenen Intelligenz-Aufgaben bei {nrow(fa$data)} Probanden und möchten diese mit Hilfe einer Faktorenanalyse auswerten.</p><p>
+
+Die folgende Tabelle zeigt die Eigenwerte und das 95%-Quantil der zufällig erzeugten Eigenwerte einer Parallel-Analyse (PA):</p>
 
 {fa_table_parallel(fa$fa_parallel)}
 
 <p>Wie viele Faktoren sollten nach dem Kaiserkriterium extrahiert werden?")
+
   q1 <- new("NumericGap", response_identifier = "kaiser", solution = fa$kaiser_num)
   p2 <- "</p><p>Wie viele Faktoren sollten nach der Parallelanalyse extrahiert werden?"
   q2 <- new("NumericGap", response_identifier = "pa", solution = fa$fa_parallel$n_fac_EFA)
-  which_fac <- sample(seq(fa$n_items), 1)
-  p3 <- glue::glue("Wie viel Varianz wird durch Faktor {which_fac} erklärt? Geben Sie den Wert als Dezimalzahl an (z. B. 0.43 für 43%) und runden Sie auf 2 Dezimalstellen.")
+  which_fac <- sample(seq(fa$n_factors_model), 1)
+  p3 <- glue::glue("</p><p>Wie viel Varianz wird durch Faktor {which_fac} erklärt? Geben Sie den Wert als Dezimalzahl an (z. B. <b>0.43</b> für 43%) und runden Sie auf 2 Dezimalstellen.")
+
   q3 <- new("NumericGap", response_identifier = "var",
-            solution = as.numeric(fa$fa_parallel$eigenvalues_EFA[which_fac, 1] / fa$n_items))
-  eigenvalues <- kableExtra::kable_styling(
-    kable_input = kable((fa$fa$vars_accounted[1,]), booktabs = T, caption = "Faktoren-Lösung"), full_width = F,
-    position = "left")
+            solution = as.numeric(round(fa$fa$vars_accounted_rot[which_fac, 1] / fa$n_items, 2)), tolerance = 0.01)
+
   which_item <- sample(seq(fa$n_items), 1)
-  p4 <- glue::glue("</p><p>Sie entschließen sich dazu, {fa$n_factors_model} Faktor(en) zu extrahieren und eine Varimax-Rotation durchzuführen. Die Ergebnisse sind in folgender Tabelle dargestellt.</p> {fa_table2(fa$fa)}
+  p4 <- glue::glue("</p><p>Sie entschließen sich aufgrund theoretischer Überlegungen dazu, {fa$n_factors_model} Faktor(en) zu extrahieren und eine Varimax-Rotation durchzuführen. Die Ergebnisse sind in folgender Tabelle dargestellt.</p> {fa_table2(fa$fa)}
 
-                   <p>Die Eigenwerte für diese Lösung sind: {eigenvalues} </p><p>Welche Kommunalität hat Item {which_item}?")
+                   <p>Die Eigenwerte für diese Lösung sind: {eigenvalues} </p>
 
-  q4 <- new("NumericGap", response_identifier = "h2", solution = as.numeric(fa$h2[which_item]))
-  new("Entry", identifier = "fa",
-      content = list(p1, q1, p2, q2, p3, q3, p4, q4
+                   <p>Welche Kommunalität hat Item {which_item}? Runden Sie auf 2 Dezimalstellen.")
+
+  q4 <- new("NumericGap", response_identifier = "h2", solution = as.numeric(round(fa$h2[which_item], 2)), tolerance = 0.01)
+  new("Entry", identifier = "fa", title = paste0("fa", seed),
+      content = list(p1, q1, p2, q2, p4, q4, p3, q3
                      , "</p>"))
 }
