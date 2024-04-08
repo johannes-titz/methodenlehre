@@ -1,0 +1,16 @@
+id;n_within;n_between;parametric;solution;hypothesis;scalelevel
+ttest_btw;0;2;T;t-Test für unabhängige Stichproben;NA;Intervall
+ttest_wi;2;0;T;t-Test für abhängige Stichproben;NA;Intervall
+anova_mx;2;2;T;ANOVA mixed;unspecific;Intervall
+anova_btw;0;3;T;ANOVA für unabhängige Stichproben;unspecific;Intervall
+anova_wi;3;0;T;ANOVA für abhängige Stichproben;unspecific;Intervall
+wilcox_btw_int;0;2;F;Wilcoxon-Rangsummen-Test (U-Test);NA;Intervall
+wilcox_wi_in;2;0;F;Wilcoxon-Vorzeichen-Rang-Test (U-Test);NA;Intervall
+ca_mx;2;2;T;Kontrastanalyse mixed;specific;Intervall
+ca_btw;0;3;T;Kontrastanalyse für unabhängige Stichproben;specific;Intervall
+ca_wi;3;0;T;Kontrastanalyse für abhängige Stichproben;specific;Intervall
+wilcox_btw_ord;0;2;NA;Wilcoxon-Rangsummen-Test (U-Test);NA;Ordinal
+wilcox_wi_ord;2;0;NA;Wilcoxon-Vorzeichen-Rang-Test (U-Test);NA;Ordinal
+chisq2;0;2;NA;Chi-Quadrat-Test;NA;Nominal
+mcnemar;2;0;NA;McNemar-Test;NA;Nominal
+chisq3;0;3;NA;Chi-Quadrat-Test;NA;Nominal
