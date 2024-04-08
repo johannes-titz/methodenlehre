@@ -7,8 +7,7 @@
 df2gap(df)
 }
 \arguments{
-\item{data}{frame that has the same names as NumericGap class, except for
-response_identifier, which is taken from the rownames.}
+\item{data}{frame that has the same names as NumericGap class (question, solution, id, expected_length, tolerance, tolerance_type)}
 }
 \value{
 list of NumericGap objects wrapped in html paragraphs.
