@@ -1,4 +1,5 @@
 #todo: tabellen updaten, sodass 0.001 auch geht
+#todo: ggf. rundung auf 3 dezimalstellen um tabellen, oder rechner zulassen
 ttest_data <- function() {
   data(ipip2)
   data(ipipneo_items)
@@ -13,24 +14,24 @@ ttest_data <- function() {
   names(data)[1] <- c("dv")
 
   alpha <- sample(c(0.05, 0.01), 1)
-  hypothesis <- c("two.sided" = mathml(quote(mu["A"] != mu["B"])), 
+  hypothesis <- c("two.sided" = mathml(quote(mu["A"] != mu["B"])),
                   "less" = mathml(quote(mu["A"] < mu["B"])),
                   "greater" = mathml(quote(mu["A"] > mu["B"])))
-  actual_alphas <- c(alpha / 2, alpha, 1 - alpha) 
+  actual_alphas <- c(alpha / 2, alpha, 1 - alpha)
   df <- nrow(data) - 2
   critical_t <- lapply(actual_alphas, function(alpha) mml_eq(qt(alpha, df), T))
   critical_t <- plyr::ldply(critical_t, data.frame)
   df_results <- data.frame(hypothesis = names(hypothesis), mml = hypothesis,
                            alpha = actual_alphas, critical_t = round(critical_t$res, 3),
     mml_t = critical_t$mml)
-  
+
   result <- df_results %>%
     dplyr::sample_n(1)
 
   labels <- ifelse(!item$reverse_coded, '1="very inaccurate" bis 5="very accurate"',
                    '1="very accurate" bis 5="very inaccurate"')
 
-  ttest <- t.test(dv ~ country, data = data, var.equal = T, 
+  ttest <- t.test(dv ~ country, data = data, var.equal = T,
                   alternative = names(hypothesis), alpha = alpha)
 
   ttest_output <- capture.output(print(ttest))
@@ -56,7 +57,7 @@ ttest <- function() {
   #              mround(mml_d$res, 3),
 ml#_n$res,
 
-  #  fb2 <- 
+  #  fb2 <-
 
   #fb <- c(part1, mml_d$mml, "Hier müssen wir nur schauen ob der p-Wert kleiner oder gleich Alpha ist.", mml_n$mml, result$mml_t)
   #extol <- c(abs(round(solutions[1], 3)*0.01), 0, 0, 0.041)
@@ -85,7 +86,7 @@ Beantworten Sie folgende Fragen. Runden Sie, wenn nötig, auf 3 Dezimalstellen.
 
 #feedback <- c("Die Effektgröße für unabhängige Stichproben kann man direkt aus dem t-Wert approximieren: $d = t\\cdot\\frac{n_A+n_B}{\\sqrt{\\mathrm{df}\\cdot n_A\\cdot n_B}}$. Eine Stichprobengröße steht schon da, die andere lässt sich aus den Freiheitsgraden berechnen (siehe Frage 3). Bitte beachten Sie, dass diese Effektgröße nur eine Approximation ist. Um den exakten Wert auszurechnen, brauchen Sie die Rohdaten.",
 #"Das Ergebnis ist signifikant wenn $p\\leq\\alpha$.",
-#"Die Gesamtstichprobe kann aus den Freiheitsgraden berechnet werden. Für unabhängige Stichproben gilt bei Varianzhomogenität: $\\mathrm{df} = n_A-1+n_B-1 = N-2$. Die Formel nach N umstellen und schon haben wir die Freiheitsgrade.",
+#"Die Gesamtstichprobe kann aus den Freiheitsgraden berechnet werden. Für unabhängige Stichproben gilt bei Varianzhomogenität: $\\mathrm{df} = n_A-1+n_B-1 = N-2$. Die Formel nach N umstellen und schon haben wir die Gesamtstichprobengröße.",
 #aussage)
 
 fb_critical_t <- function(hypothesis, hypothesis_mml, critical_t, alpha, df, mml_t) {
@@ -94,9 +95,9 @@ fb_critical_t <- function(hypothesis, hypothesis_mml, critical_t, alpha, df, mml
 
   aussage1 <- glue::glue("{part1} Stellen wir uns die t-Verteilung vor, erwarten wir also ein extremes Ergebnis auf der linken oder rechten Seite der Verteilung. Alpha muss in diesem Fall halbiert werden und es gibt zwei kritische t-Werte. Einen für die Fläche von {alpha/2} und einen für die Fläche von {1-alpha/2}. Da Tabellen üblicherweise die Integrale für große Flächenanteile angeben, schauen wir bei {1-alpha/2} und finden einen t-Wert von {-critical_t}. Der andere t-Wert ist exakt der gleiche, nur negiert: {critical_t}. Die Aufgabenstellung fordert uns auf diesen kleineren Wert anzugeben.</p>")
 
-  aussage2 <- glue::glue("{part1} Stellen wir uns die t-Verteilung vor, erwarten wir also ein extremes Ergebnis auf der linken Seite der Verteilung. Alpha muss in diesem Fall nicht halbiert werden und es gibt nur einen kritischen t-Wert für die Fläche von {alpha}. Da Tabellen üblicherweise die Integrale für große Flächenanteile angeben können wir den t-Wert nicht direkt ablesen. Die t-Verteilung ist allerdings symmetrisch also schauen wir einfach bei {1-alpha} und finden einen t-Wert von {-critical_t}, den wir nur noch negieren müssen: {critical_t}.</p>") 
+  aussage2 <- glue::glue("{part1} Stellen wir uns die t-Verteilung vor, erwarten wir also ein extremes Ergebnis auf der linken Seite der Verteilung. Alpha muss in diesem Fall nicht halbiert werden und es gibt nur einen kritischen t-Wert für die Fläche von {alpha}. Da Tabellen üblicherweise die Integrale für große Flächenanteile angeben können wir den t-Wert nicht direkt ablesen. Die t-Verteilung ist allerdings symmetrisch also schauen wir einfach bei {1-alpha} und finden einen t-Wert von {-critical_t}, den wir nur noch negieren müssen: {critical_t}.</p>")
 
-  aussage3 <- glue::glue("{part1} Stellen wir uns die t-Verteilung vor, erwarten wir also ein extremes Ergebnis auf der rechten Seite der Verteilung. Alpha muss in diesem Fall nicht halbiert werden und es gibt nur einen kritischen t-Wert für die Fläche {1 - alpha}. Da Tabellen üblicherweise die Integrale für große Flächenanteile angeben, können wir den t-Wert direkt bei {1-alpha} ablesen und finden einen t-Wert von {critical_t}.") 
+  aussage3 <- glue::glue("{part1} Stellen wir uns die t-Verteilung vor, erwarten wir also ein extremes Ergebnis auf der rechten Seite der Verteilung. Alpha muss in diesem Fall nicht halbiert werden und es gibt nur einen kritischen t-Wert für die Fläche {1 - alpha}. Da Tabellen üblicherweise die Integrale für große Flächenanteile angeben, können wir den t-Wert direkt bei {1-alpha} ablesen und finden einen t-Wert von {critical_t}.")
 
   aussagen <- c(two.sided = aussage1, less = aussage2, greater = aussage3)
   aussage <- aussagen[hypothesis]
