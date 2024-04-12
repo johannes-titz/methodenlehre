@@ -4,7 +4,7 @@
 \alias{ki_bin}
 \title{Exercise ki_bin}
 \usage{
-ki_bin()
+ki_bin(seed)
 }
 \value{
 : Entry rqti object
