@@ -20,17 +20,18 @@ get_supplement_paths <- function() {
 #' @export
 df2gap <- function(df) {
   helper <- function(row) {
-    list("<p>", paste0(row$question, ": "),
+    list("<p>", paste0(row$question),
          new("NumericGap",
              solution = as.numeric(row$solution),
              response_identifier = row$id,
-             expected_length = ifelse(is.null(row$solution), nchar(row$solution.base_rate), row$expected_length),
+             expected_length = ifelse(is.null(row$expected_length), nchar(row$solution),
+                                      row$expected_length),
              tolerance = as.numeric(row$tolerance),
              tolerance_type = row$tolerance_type),
          "</p>")
   }
   # this is somewhat more robust
-  df$id <- row.names(df)
+  #df$id <- row.names(df)
   rows <- purrr::transpose(df)
   res <- lapply(rows, helper)
   res
