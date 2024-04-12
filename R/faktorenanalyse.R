@@ -87,7 +87,7 @@ faktorenanalyse <- function(seed = sample.int(1e5, 1)) {
                         col.names = c("Faktor", "Eigenwert")), full_width = F,
     position = "left")
 
-  p1 <- glue::glue("<p>Der berühmte Psychologe Thurstone hat im Jahr 1941 eine Studie zu Intelligenz durchgeführt, die Sie versuchen zu replizieren. Sie erheben Daten zu verschiedenen Intelligenz-Aufgaben bei {nrow(fa$data)} Probanden und möchten diese mit Hilfe einer Faktorenanalyse auswerten.</p><p>
+  p1 <- glue::glue("<p>Der berühmte Psychologe Thurstone hat im Jahr 1941 eine Studie zu Intelligenz durchgeführt, die Sie versuchen zu replizieren. Sie erheben Daten zu verschiedenen Intelligenz-Aufgaben bei {nrow(fa$data)} Probanden und möchten diese zunächst mit Hilfe einer explorativen Faktorenanalyse auswerten.</p><p>
 
 Die folgende Tabelle zeigt die Eigenwerte und das 95%-Quantil der zufällig erzeugten Eigenwerte einer Parallel-Analyse (PA):</p>
 
