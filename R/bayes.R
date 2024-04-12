@@ -90,12 +90,18 @@ bayes_plot <- function(example) {
   SetEdgeStyle(miss,label = "als ungeeig. eingestuft")
   SetEdgeStyle(correct_rejection, label = "als ungeeig. eingestuft")
   SetEdgeStyle(false_alarm,label = "als geeig. eingestuft")
-  export_graph(data.tree::ToDiagrammeRGraph(root), "bayes.svg")
-  svg_string <- paste(readLines("bayes.svg")[-1], collapse = " ")
+  export_graph(data.tree::ToDiagrammeRGraph(root), "bayes.png")
+  tf1 <- "bayes.png"
+  txt <- RCurl::base64Encode(readBin(tf1, "raw", file.info(tf1)[1, "size"]), "txt")  # Convert the graphic image to a base 64 encoded string.
+  image <- htmltools::HTML(paste0('<img src="data:image/png;base64,', txt, '"/>'))
+  # Save the image as a markdown-friendly html object.
+
   output <- capture.output(print(root, "geeignet", "AC_geeignet"))
   output <- substring(output, 2)
   output <- gsub("levelName", "#Personen", output)
-  paste("<pre>", paste(output, collapse = "<br/>"), "</pre>", collapse = "")
+  # alternative, text based
+  output <- paste("<pre>", paste(output, collapse = "<br/>"), "</pre>", collapse = "")
+  image
 }
 
 #' generate story for bayes exercise
