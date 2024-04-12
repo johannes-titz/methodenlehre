@@ -8,7 +8,7 @@ skalenniveau$cols <- factor(skalenniveau$cols,
 skalenniveau$cols_id <- forcats::fct_relabel(skalenniveau$cols, ~ substr(.x, 1, 1))
 
 librarian::shelf(simpleCache, dplyr)
-simpleCache::setCacheDir("cache")
+simpleCache::setCacheDir("simpleCache")
 simpleCache("sk", qti::extract_results("data-raw/TESTSkalenniveaus_2024-02-09__09-42-24__010.zip"))
 
 sk2 <- sk %>%
