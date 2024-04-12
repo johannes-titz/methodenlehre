@@ -6,3 +6,4 @@
 ^data-raw$
 ^supplements\.sh$
 ^*\.pdf$
+^scratchpad\.R$
