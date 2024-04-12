@@ -33,7 +33,7 @@ df2gap <- function(df) {
   # this is somewhat more robust
   #df$id <- row.names(df)
   rows <- purrr::transpose(df)
-  res <- lapply(rows, helper)
+  res <- unlist(lapply(rows, helper))
   res
 }
 
