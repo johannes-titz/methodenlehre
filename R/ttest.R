@@ -1,8 +1,8 @@
 #todo: tabellen updaten, sodass 0.001 auch geht
 #todo: ggf. rundung auf 3 dezimalstellen um tabellen, oder rechner zulassen
 ttest_data <- function() {
-  data(ipip2)
-  data(ipipneo_items)
+  ipip2 <- get_data(ipip2)
+  ipipneo_items <- get_data(ipipneo_items)
 
   countries <- sort(sample(unique(ipip2$country), 2))
   item <- ipipneo_items %>%
