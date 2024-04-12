@@ -28,7 +28,7 @@ fa_example <- function(n_factors_model = sample(2:6, 1)) {
   # psych::cor.plot(data, numbers=TRUE, xlas = 2)
   # dev.off()
   fa_parallel <- EFAtools::PARALLEL(data, eigen_type = "EFA", method = "ML",
-                                    n_datasets = 100, n_factors = n_factors_model)
+                                    n_datasets = 100, n_factors = 1)
   # png("fa2.png", width = 800, height = 600)
   # dev.off()
   # img1 <- as.character(htmltools::img(src = base64enc::dataURI(file = "fa1.png",
@@ -61,12 +61,15 @@ fa_table_parallel <- function(fa_parallel) {
 
 fa_table2 <- function(myfa) {
   rot_loadings <- myfa$rot_loadings
-  rot_loadings <- rot_loadings[, order(colnames(rot_loadings))]
+  rot_loadings <- rot_loadings#[, order(colnames(rot_loadings))]
   output <- round(cbind(`Item Nummer` = 1:length(myfa$h2),
                         rot_loadings), 3)
   row.names(output) <- NULL
   tbl <-tbl <- kableExtra::kable_styling(
-    kable_input = kable(output, digits = 2, booktabs = T, caption = "Tabelle Faktoren-Lösung"),
+    kable_input = kable(output, digits = 2, booktabs = T,
+                        caption = "Tabelle Faktoren-Lösung",
+                        col.names = c("Item Nummer", paste0("F", seq(ncol(output)-1)))),
+
     full_width = F,
     position = "left")
   tbl
@@ -75,8 +78,10 @@ fa_table2 <- function(myfa) {
 faktorenanalyse <- function(seed = sample.int(1e5, 1)) {
   set.seed(seed)
   fa <- fa_example()
-  eigenvalues <- kableExtra::kable_styling(
-    kable_input = kable(fa$fa$vars_accounted_rot[1,], booktabs = T,
+  eigenvalues <- fa$fa$vars_accounted_rot[1,]
+  names(eigenvalues) <- paste0("F", seq(eigenvalues))
+  eigenvalues_table <- kableExtra::kable_styling(
+    kable_input = kable(eigenvalues, booktabs = T,
                         caption = "Tabelle Eigenwerte",
                         digits = 2,
                         col.names = c("Faktor", "Eigenwert")), full_width = F,
@@ -96,18 +101,42 @@ Die folgende Tabelle zeigt die Eigenwerte und das 95%-Quantil der zufällig erze
   which_fac <- sample(seq(fa$n_factors_model), 1)
   p3 <- glue::glue("</p><p>Wie viel Varianz wird durch Faktor {which_fac} erklärt? Geben Sie den Wert als Dezimalzahl an (z. B. <b>0.43</b> für 43%) und runden Sie auf 2 Dezimalstellen.")
 
+  eigenvalue <- round(eigenvalues[which_fac], 2)
+  var_explained <- as.numeric(round(eigenvalue / fa$n_items, 2))
   q3 <- new("NumericGap", response_identifier = "var",
-            solution = as.numeric(round(fa$fa$vars_accounted_rot[which_fac, 1] / fa$n_items, 2)), tolerance = 0.01)
+            solution = var_explained, tolerance = 0.01)
 
   which_item <- sample(seq(fa$n_items), 1)
   p4 <- glue::glue("</p><p>Sie entschließen sich aufgrund theoretischer Überlegungen dazu, {fa$n_factors_model} Faktor(en) zu extrahieren und eine Varimax-Rotation durchzuführen. Die Ergebnisse sind in folgender Tabelle dargestellt.</p> {fa_table2(fa$fa)}
 
-                   <p>Die Eigenwerte für diese Lösung sind: {eigenvalues} </p>
+                   <p>Die Eigenwerte für diese Lösung sind: {eigenvalues_table} </p>
 
                    <p>Welche Kommunalität hat Item {which_item}? Runden Sie auf 2 Dezimalstellen.")
 
   q4 <- new("NumericGap", response_identifier = "h2", solution = as.numeric(round(fa$h2[which_item], 2)), tolerance = 0.01)
-  new("Entry", identifier = "fa", title = paste0("fa", seed),
+
+  feedback <- fa_feedback(which_item, fa$h2, fa$n_factors_model, fa$n_items, eigenvalue)
+  new("Entry", identifier = paste0("fa", seed),
       content = list(p1, q1, p2, q2, p4, q4, p3, q3
-                     , "</p>"))
+                     , "</p>"), feedback = list(feedback))
+}
+
+fa_feedback <- function(h2_item, h2, n_factors_model, n_items, eigenvalue) {
+  content <- c("Hier schaut man einfach bei der Tabelle zur Parallel-Analyse wie viele Eigenwerte größer oder gleich 1 sind. Die Idee ist nur Faktoren zu extrahieren, die mehr Varianz erklären als ein einzelnes Item.",
+               "Hier schaut man bei der Tabelle zur Parallel-Analyse wie viele Eigenwerte größer oder gleich dem 95% Perzentil der Eigenwerte aus der Parallel-Analyse entsprechen. Die Idee ist nur Faktoren zu extrahieren, die überzufällig große Eigenwerte haben. Das 95%-Perzentil ist in dieser Hinsicht willkürlich gewählt und kann natürlich in eigenen Studien angepasst werden.",
+               paste("Hierfür muss man bei der Tabelle <i>Faktoren-Lösung</i> beim entsprechendem Item die Faktorladungen quadrieren und aufsummieren: ",
+               latexmath(glue::glue("h_<<h2_item>>^2 = \\sum_{f=1}^<<n_factors_model>> \\lambda_{<<h2_item>>,f}^2 = <<h2[h2_item]>>", .open="<<", .close = ">>"))),
+               paste0(glue::glue("Die Gesamtvarianz entspricht der Anzahl der Items, da bei der Faktoren-Analyse die Items standardisiert werden. Die Gesamtvarianz ist also {n_items}. Der Eigenwert eines Faktors entspricht gleichzeitig der Varianz dieses Faktors. Man teilt also einfach den Eigenwert durch die Gesamtvarianz: "),
+                      latexmath(glue::glue("\\frac{\\lambda_k}{M}=\\frac{<<eigenvalue>>}{<<n_items>>}=<<round(eigenvalue/n_items, 2)>>", .open="<<", .close =">>"))))
+
+  summary_html <- paste0("<summary>", "Frage ", seq(content), "</summary>")
+  content <- paste0("<details>", summary_html, content, "</details>")
+  new("ModalFeedback", content = list(content))
+}
+
+fa_studis <- function(seeds = 1:20) {
+  exercises <- parallel::mclapply(seeds, faktorenanalyse)
+  section <- new("AssessmentSection", assessment_item = exercises, selection = 1)
+  test <- new("AssessmentTestOpal", identifier = "faktorenanalyse",
+              section = list(section))
 }
