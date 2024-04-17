@@ -41,23 +41,23 @@ bayes_example <- function(seed = sample.int(1e3)) {
 #' @param example bayes_example list
 #' @return data frame for df2gap
 bayes_qdf <- function(solution) {
-  label <- c(
+  lable <- c(
     hit = "tatsächlich geeignet UND vom Assessment-Center als geeignet eingeschätzt",
     miss = "tatsächlich geeignet UND vom Assessment-Center als ungeeignet eingeschätzt",
     false_alarm = "tatsächlich ungeeignet UND vom Assessment-Center als geeignet eingeschätzt",
     correct_rejection = "tatsächlich ungeeignet UND vom Assessment-Center als ungeeignet eingeschätzt"
   )
-  label <- paste(
+  lable2 <- paste(
     "Wahrscheinlichkeit für die Konjunktion der zwei Ereignisse: ",
-    label, " (in %)"
+    lable, " (in %)"
   )
-  label <- c(
-    label,
+  lable2 <- c(
+    lable2,
     "Nun wollen Sie abschließend für Ihren Bericht abschätzen, wie wahrscheinlich es ist, dass eine als geeignet eingeschätzte Führungskraft, tatsächlich geeignet ist (in %)")
   df <- data.frame(solution = solution, tolerance = 1,
-                   tolerance_type = "absolute", question = label,
+                   tolerance_type = "absolute", question = lable2,
+                   id = c(names(lable), "revision"),
                    expected_length = 2)
-  row.names(df) <- names(label)
   df
 }
 
@@ -84,14 +84,15 @@ bayes_plot <- function(example) {
                                          geeignet = "nein",
                                          AC_geeignet = "nein")
 
-  SetEdgeStyle(suited, label = "geeignet")
-  SetEdgeStyle(unsuited,label = "ungeeignet")
-  SetEdgeStyle(hit, label = "als geeig. eingestuft")
-  SetEdgeStyle(miss,label = "als ungeeig. eingestuft")
-  SetEdgeStyle(correct_rejection, label = "als ungeeig. eingestuft")
-  SetEdgeStyle(false_alarm,label = "als geeig. eingestuft")
-  export_graph(data.tree::ToDiagrammeRGraph(root), "bayes.png")
-  tf1 <- "bayes.png"
+  SetEdgeStyle(suited, lable = "geeignet")
+  SetEdgeStyle(unsuited,lable = "ungeeignet")
+  SetEdgeStyle(hit, lable = "als geeig. eingestuft")
+  SetEdgeStyle(miss,lable = "als ungeeig. eingestuft")
+  SetEdgeStyle(correct_rejection, lable = "als ungeeig. eingestuft")
+  SetEdgeStyle(false_alarm,lable = "als geeig. eingestuft")
+  tf1 <- tempfile(fileext = ".png")
+  export_graph(data.tree::ToDiagrammeRGraph(root), tf1)
+
   txt <- RCurl::base64Encode(readBin(tf1, "raw", file.info(tf1)[1, "size"]), "txt")  # Convert the graphic image to a base 64 encoded string.
   image <- htmltools::HTML(paste0('<img src="data:image/png;base64,', txt, '"/>'))
   # Save the image as a markdown-friendly html object.
