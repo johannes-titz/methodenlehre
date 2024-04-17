@@ -192,6 +192,10 @@ mml_eq <- function(orig_expr, return_result = F, flags = list(quote(round(3L))))
   }
 }
 
+M <- function(x){
+  mathml(rlang::enexpr(x))
+}
+
 latexmath <- function(string, embrace = "$$") {
   file <- tempfile()
   file_out <- tempfile()
@@ -199,4 +203,13 @@ latexmath <- function(string, embrace = "$$") {
   rmarkdown::pandoc_convert(file, to = "html", from = "latex",
                                         options = "--mathml", output = file_out)
   readLines(file_out)
+}
+
+round2 = function(x, digits) {
+  posneg = sign(x)
+  z = abs(x)*10^digits
+  z = z + 0.5 + sqrt(.Machine$double.eps)
+  z = trunc(z)
+  z = z/10^digits
+  z*posneg
 }
