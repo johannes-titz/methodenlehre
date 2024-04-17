@@ -134,9 +134,10 @@ fa_feedback <- function(h2_item, h2, n_factors_model, n_items, eigenvalue) {
   new("ModalFeedback", content = list(content))
 }
 
-fa_studis <- function(seeds = 1:20) {
+faktorenanalyse_stud <- function(seeds = 1:20) {
   exercises <- parallel::mclapply(seeds, faktorenanalyse)
   section <- new("AssessmentSection", assessment_item = exercises, selection = 1)
   test <- new("AssessmentTestOpal", identifier = "faktorenanalyse",
-              section = list(section))
+              section = list(section), calculator = "scientific-calculator",
+              files = get_supplement_paths())
 }
