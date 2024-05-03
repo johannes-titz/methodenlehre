@@ -180,7 +180,7 @@ mycor <- function(x, y) {
 }
 
 #' transform r expression to mml with solution
-mml_eq <- function(orig_expr, return_result = F, flags = list(round(3L)),
+mml_eq <- function(orig_expr, return_result = F, flags = list(quote(round(3L))),
                    round = 3) {
   expr <- rlang::enexpr(orig_expr)
   # required, otherwise it is not evaluted in the environment where it was created
