@@ -47,15 +47,15 @@ prepare_tovee <- function() {
   tibble::lst(data, story)
 }
 
-prepare_prestige <- function() {
+prepare_prestige <- function(n_ivs = 1) {
   Prestige <- carData::Prestige
   Prestige$women <- round(Prestige$women)
-  names(Prestige)[3] <- "women%"
+  names(Prestige)[3] <- "women_percent"
   Prestige$income <- Prestige$income / 1000
   which_rows <- sample(1:nrow(Prestige), size = sample(70:95, 1),
                        replace = FALSE)
-  data <- Prestige[which_rows, sample(1:4, 2)]
-  story <- paste0("Der <em>Prestige</em> Datensatz besteht aus 102 Berufen/Berufsgruppen eines Zensus in Kanada von 1971. Die Variablen sind unter anderem der durchschnittliche Bildungsgrad in Jahren (<em>education</em>), das durchschnittliche Einkommen in der Einheit 1000 USD pro Jahr (<em>income</em>), der Anteil an Frauen in % (<em>women%</em>) sowie der Pineo-Porter Prestige Score (<em>prestige</em>), der das Ansehen eines Berufs erfasst. Die Variablen beziehen sich alle auf die Berufsgruppe. ",
+  data <- Prestige[which_rows, sample(1:4, 1+n_ivs)]
+  story <- paste0("Der <em>Prestige</em> Datensatz besteht aus 102 Berufen/Berufsgruppen eines Zensus in Kanada von 1971. Die Variablen sind unter anderem der durchschnittliche Bildungsgrad in Jahren (<em>education</em>), das durchschnittliche Einkommen in der Einheit 1000 USD pro Jahr (<em>income</em>), der Anteil an Frauen in % (<em>women_percent</em>) sowie der Pineo-Porter Prestige Score (<em>prestige</em>), der das Ansehen eines Berufs erfasst. Die Variablen beziehen sich alle auf die Berufsgruppe. ",
                  "Sie finden den Datensatz im Internet, jedoch ist dieser unvollständig mit nur ", nrow(data), " Berufen.\n")
   tibble::lst(data, story)
 }
