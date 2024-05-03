@@ -54,7 +54,7 @@ df2sc <- function(file) {
 #' should be a factor with additional levels!
 #'
 df2sctable <- function(df, identifier, title = identifier, shuffle = T,
-                       story, feedback = "") {
+                       story, feedback = "", points = nrow(df) / 2) {
  df$cols <- as.factor(df$cols)
  df$cols_id <- as.factor(df$cols_id)
  mt <- new("OneInRowTable",
@@ -65,7 +65,7 @@ df2sctable <- function(df, identifier, title = identifier, shuffle = T,
            cols = levels(df$cols), # important to use levels!
            cols_identifiers = levels(df$cols_id), # same
            answers_identifiers = paste(df$rows_id, df$cols_id),
-           points = nrow(df) / 2,
+           points = points,
            title = title,
            identifier = identifier,
            shuffle = shuffle
