@@ -1,0 +1,7 @@
+# download.file("https://frontiersin.figshare.com/ndownloader/files/25716038", "data-raw/stroop.xlsx")
+stroop <- readxl::read_excel("data-raw/stroop.xlsx")
+stroop <- rename(stroop, c(percent_hrmax = "Percent_HRmax"))
+stroop <- janitor::clean_names(stroop)
+stroop$id <- as.factor(stroop$id)
+stroop$mode <- as.factor(stroop$mode)
+usethis::use_data(stroop, overwrite = T)
