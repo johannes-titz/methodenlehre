@@ -215,3 +215,16 @@ round2 = function(x, digits) {
   z = z/10^digits
   z*posneg
 }
+
+metadata_jt <- function(version = "") {
+  qti_metadata(qti_contributor("Johannes Titz"),
+               rights = "CC-BY-NC-SA 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/",
+               version = version)
+}
+
+html_table <- function(kable) {
+  kableExtra::kable_styling(
+    full_width = F, position = "left",
+    kable_input = kable
+  )
+}
