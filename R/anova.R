@@ -1,3 +1,9 @@
+# mayb add
+# - find p value from table
+# - calculate mean squares
+# - calculate eta²
+#
+# granovaGG has some nice data on anorexia
 
 anova_model <- function(iv_name, dv_name, data, hide_f = F) {
   formula <- as.formula(glue::glue("{dv_name} ~ {iv_name} + Error(id/{iv_name})"))
@@ -222,11 +228,4 @@ anova_stud <- function(seed = 1:20) {
               calculator = "scientific")
   test
 }
-
-# auch möglich:
-#   - P-Wert aus Tabelle bestimmen
-# - Vorherige Berechnung der mittleren Quadrate
-# - Bestimmung der eta^2
-
-## granovaGG has some nice data on anorexia
 
