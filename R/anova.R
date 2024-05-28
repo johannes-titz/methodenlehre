@@ -5,17 +5,19 @@
 #
 # granovaGG has some nice data on anorexia
 
-anova_model <- function(iv_name, dv_name, data, hide_f = F) {
-  formula <- as.formula(glue::glue("{dv_name} ~ {iv_name} + Error(id/{iv_name})"))
+anova_model <- function(iv_name, dv_name, data, hide_f = FALSE) {
+  formula <- as.formula(
+    glue::glue("{dv_name} ~ {iv_name} + Error(id/{iv_name})")
+  )
   anova <- aov(formula, data = data)
   tbl <- as.data.frame(summary(anova)[[2]][[1]])
-  tbl[,2:4] <- round(tbl[, 2:4], 3)
+  tbl[, 2:4] <- round(tbl[, 2:4], 3)
   tbl$`F value` <- ifelse(hide_f, NA, tbl$`F value`)
   p <- tbl$`Pr(>F)`[1]
   tbl$`Pr(>F)`[1] <- ifelse(round(p, 3) != 0, round(p, 3),
-                            format(p, scientific = T, digits = 3))
+                            format(p, scientific = TRUE, digits = 3))
 
-  tbl_html <- html_table(kable(tbl, "html"))
+  tbl_html <- html_table(knitr::kable(tbl, "html"))
   tbl_html <- gsub("&lt;", "&#60;", tbl_html)
   tbl_html <- gsub("&gt;", "&#62;", tbl_html)
   tbl_html <- gsub("NA", "", tbl_html)
@@ -30,21 +32,22 @@ anova_example <- function(seed = sample.int(1:1e5, 1)) {
   # within
   within <- stroop %>%
     filter(time == 1) %>%
-    select(mode, id, vo2:percent_hrmax, reverse_stroop_neutral_test:stroop_interference) %>%
+    select(mode, id, vo2:percent_hrmax,
+           reverse_stroop_neutral_test:stroop_interference) %>%
     # vary df_UV
     filter(mode %in% sample(unique(mode), sample(2:4, 1)),
            id %in% sample(id, sample(38:48, 1)))
-  #within$mode <- as.factor(as.character(within$mode))
+
   # participants
 
   iv_name <- "mode"
   dv_names <- names(within)[!(names(within) %in% c("mode", "id"))]
   dv_name <- sample(dv_names, 1)
 
-  mdl <- anova_model(iv_name, dv_name, within, hide_f = T)
+  mdl <- anova_model(iv_name, dv_name, within, hide_f = TRUE)
 
   dv <- unlist(within[dv_name])
-  qs_ges <- sum((dv-mean(dv))^2)
+  qs_ges <- sum((dv - mean(dv))^2)
   list(mdl = mdl, story = takahashi_story(dv_name), qs_ges = qs_ges)
 }
 
@@ -52,7 +55,7 @@ takahashi_story <- function(dv_name) {
   glue::glue("In der sportpsychologischen Forschung wird der Stroop-Test und seine Varianten häufig verwendet, um die Vorteile von sportlicher Betätigung auf die kognitive Funktion zu untersuchen. Angelehnt an die Studie von Takahashi und Gove (2020) nahmen junge Erwachsene an einem Within-Subjects-Experiment teil, bei dem die Sportart variiert wurde. Nach jeder Sportart absolvierten die Teilnehmer Stroop-Tests in neutraler und inkongruenter Form sowie die Reverse-Stroop-Tests in neutraler und inkongruenter Form. Erfasst wurde die Leistung bei jedem Test, sowie diverse Fitness-Maße. Die folgende ANOVA-Tabelle stellt die Ergebnisse dar, wobei <em>mode</em> die unabhängige Variable (Sportart) ist. Die abhängige Variable ist <em>{dv_name}</em>.")
 }
 
-takahashi_explain <- function(){
+takahashi_explain <- function() {
   c('<details><summary>Erklärung der Variablen (optional)</summary><table>
     <tr>
         <th>Begriff</th>
@@ -109,7 +112,7 @@ hug_fb <- function(fb, summary) {
 anova_eta2p <- function(tbl) {
   QS <- tbl$`Sum Sq`
   names(QS) <- c("UV", "res")
-  mml <- mml_eq(dfrac(QS["UV"], (QS["UV"])+QS["res"]), T)
+  mml <- mml_eq(dfrac(QS["UV"], (QS["UV"]) + QS["res"]), TRUE)
   q1 <- glue::glue("Wie groß ist {M(eta['p']^2L)} für die unabhängige Variable? Geben Sie das Ergebnis als Dezimalzahl an und runden Sie auf 3 Dezimalstellen.")
   fb <- paste("Laut Formelsammlung: ", mml$mml)
   list(q = list("<p>", q1, numericGap(mml$res, "eta2p"), "</p>"),
@@ -143,7 +146,7 @@ anova_n_participants <- function(tbl) {
   df <- tbl$Df
   names(df) <- c("UV", "res")
   k <- df["UV"] + 1
-  mml <- mml_eq(n <- dfrac(df["res"], (k-1L))+1L, T)
+  mml <- mml_eq(n <- dfrac(df["res"], (k - 1L)) + 1L, TRUE)
   q1 <- glue::glue("Wie viele Personen haben am Experiment teilgenommen?")
   f1 <- glue::glue("Hierfür kann man die Formel für die Freiheitsgrade der Residuen nach der Anzahl der Messungen {M(n)} umstellen, wobei {M(k)} die Anzahl der Bedingungen ist:", mml$mml)
   list(q = list("<p>", q1, numericGap(mml$res, "nparticip"), "</p>"),
@@ -155,13 +158,16 @@ anova_significant <- function(tbl) {
   alpha <- sample(c(0.05, 0.01, 0.001), 1)
   q <- glue::glue("Unterscheiden sich die Mittelwerte zwischen den Bedingungen statistisch signifikant voneinander bei einem Alpha von {alpha}? [0=nicht signifkant, 1=signifkant]")
   f <- glue::glue("Wenn {M(p<=alpha)}, ist das Ergebnis statistisch signifikant.")
-  list(q = list("<p>", q, numericGap(as.numeric(p<=alpha), "significant"), "</p>"), fb = hug_fb(f, q))
+  list(q = list("<p>", q,
+                numericGap(as.numeric(p <= alpha), "significant"),
+                "</p>"),
+       fb = hug_fb(f, q))
 }
 
 anova_f <- function(tbl) {
   sigma <- tbl$`Mean Sq`
   names(sigma) <- c("UV", "res")
-  mml <- mml_eq(F <- dfrac(roof(sigma)["UV"], roof(sigma)["res"]), T, round = 3)
+  mml <- mml_eq(F <- dfrac(roof(sigma)["UV"], roof(sigma)["res"]), TRUE, round = 3)
   q1 <- glue::glue("Wie groß ist der F-Wert?")
   f1 <- paste("Die mittleren Quadratsummen entsprechen den Varianzschätzungen, deren Verhältnis wiederum den F-Wert bildet:", mml$mml)
   list(q = list("<p>", q1, numericGap(mml$res, "fvalue"), "</p>"),
@@ -174,13 +180,14 @@ anova_varpop <- function(tbl) {
   names(sigma) <- c("UV", "res")
   q <- glue::glue("Wenn die H0 falsch wäre, was wäre dann basierend auf dem ANOVA-Output die beste Schätzung für die Populationsvarianz der abhängigen Variable?")
   f <- paste("Wenn die H0 nicht stimmt, dann lässt sich die Varianz der Mittelwerte zwischen den Gruppen nicht für die Schätzung der Populationsvarianz verwenden. Die beste Schätzung wäre also die durchschnittliche Varianz innerhalb der Gruppen (Mean Sq, Residuals):", sigma["res"])
-  list(q = list("<p>", q, numericGap(as.numeric(sigma["res"]), "varpop"), "</p>"),
+  list(q = list("<p>", q, numericGap(as.numeric(sigma["res"]), "varpop"),
+                "</p>"),
        fb = hug_fb(f, q))
 }
 
 anova_fcritical <- function(tbl)  {
   alpha <- sample(c(0.05, 0.01, 0.1), 1)
-  fcrit <- round(qf(1-alpha, tbl[1,1], tbl[2,1]), 3)
+  fcrit <- round(qf(1 - alpha, tbl[1, 1], tbl[2, 1]), 3)
   q <- glue::glue("Was ist der kritische F-Wert für ein Alpha von {alpha}?")
   f <- glue::glue("Der kritische F-Wert muss aus einer entsprechenden Tabelle abgelesen werden für ein Alpha von {alpha} und für die Freiheitsgrade (Zähler und Nenner) von: {tbl[1,1]} und {tbl[2,1]}. Der berechnete Wert auf 3 Dezimalstellen gerundet beträgt: {fcrit}")
   list(q = list("<p>", q, numericGap(fcrit, tolerance = 1,
@@ -208,11 +215,10 @@ anova <- function(seed = sample.int(1e5, 1)) {
   QS <- NULL
   QS["ges"] <- a$qs_ges
 
-  content = list("<p>", a$story, "</p>",
-                 "<p>", takahashi_explain(), "</p>",
-                 a$mdl$tbl_html,
-                 glue::glue("<p>Gegeben ist außerdem noch die Quadratsumme gesamt: {mml_eq(QS['ges'])}</p>")
-  )
+  content <- list("<p>", a$story, "</p>",
+                  "<p>", takahashi_explain(), "</p>",
+                  a$mdl$tbl_html,
+                  glue::glue("<p>Gegeben ist außerdem noch die Quadratsumme gesamt: {mml_eq(QS['ges'])}</p>"))
   content <- append(content, questions)
   fb <- modalFeedback(list(feedback))
   new("Entry", identifier = paste0("anova", seed),
@@ -221,11 +227,10 @@ anova <- function(seed = sample.int(1e5, 1)) {
 
 anova_stud <- function(seed = 1:20) {
   x <- lapply(seed, anova)
-  s <- new("AssessmentSection", visible = F,
+  s <- new("AssessmentSection", visible = FALSE,
            assessment_item = x, selection = 1)
   test <- new("AssessmentTestOpal", identifier = "anova_stud",
               section = list(s), files = get_supplement_paths(),
               calculator = "scientific")
   test
 }
-
