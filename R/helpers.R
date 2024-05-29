@@ -228,3 +228,9 @@ html_table <- function(kable) {
     kable_input = kable
   )
 }
+
+#' put fb into a paragraph with details and summary
+hug_fb <- function(fb, summary) {
+  list("<p><details><summary>", summary, "</summary>",
+       fb, "</details></p>")
+}

@@ -104,11 +104,6 @@ takahashi_explain <- function() {
 </table></details>')
 }
 
-hug_fb <- function(fb, summary) {
-  list("<p><details><summary>", summary, "</summary>",
-       fb, "</details></p>")
-}
-
 anova_eta2p <- function(tbl) {
   QS <- tbl$`Sum Sq`
   names(QS) <- c("UV", "res")
@@ -224,7 +219,8 @@ anova_questions <- function(tbl, qs_ges) {
 #' Entry object.
 #' @param seed Seed for the exercise. Default is a random seed drawn from 1:1e5.
 #' @return rqti Entry object
-#' @example a <- anova()
+#' @examples
+#' a <- anova()
 #' @export
 anova <- function(seed = sample.int(1e5, 1)) {
   a <- anova_example(seed)
@@ -256,7 +252,8 @@ anova <- function(seed = sample.int(1e5, 1)) {
 #'   versions of the exercise. Default is a vector from 1:20.
 #' @param selection How many exercises should be selected. Has to be smaller
 #'   than length of seed.
-#' @example a <- anova_stud()
+#' @examples
+#' a <- anova_stud()
 #' @return rqti test object
 #' @export
 anova_stud <- function(seed = 1:20, selection = 1) {
