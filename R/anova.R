@@ -116,7 +116,8 @@ anova_eta2p <- function(tbl) {
   q1 <- glue::glue("Wie groß ist {M(eta['p']^2L)} für die unabhängige Variable? Geben Sie das Ergebnis als Dezimalzahl an und runden Sie auf 3 Dezimalstellen.")
   fb <- paste("Laut Formelsammlung: ", mml$mml)
   list(q = list("<p>", q1, numericGap(mml$res, "eta2p"), "</p>"),
-       fb = hug_fb(fb, q1))
+       fb = hug_fb(fb, q1),
+       solution = mml$res)
 }
 
 anova_eta2_person <- function(tbl, qs_ges) {
@@ -129,7 +130,8 @@ anova_eta2_person <- function(tbl, qs_ges) {
   mml2 <- mml_eq(dfrac(QS["Person"], QS["ges"]), T)
   f1 <- glue::glue("{M(QS['Person'])} lässt sich berechnen über: {mml$mml}. {mml_eq(QS['ges'])} ist gegeben, sodass sich der Varianzanteil ergibt: {mml2$mml}")
   list(q = list("<p>", q1, numericGap(mml2$res, "eta2person"), "</p>"),
-       fb = hug_fb(f1, q1))
+       fb = hug_fb(f1, q1),
+       solution = mml2$res)
 }
 
 anova_n_groups <- function(tbl) {
@@ -139,7 +141,8 @@ anova_n_groups <- function(tbl) {
   q1 <- glue::glue("Wie viele Bedingungen gab es im Experiment?")
   f1 <- paste("Laut Formelsammlung: ", mml$mml)
   list(q = list("<p>", q1, numericGap(mml$res, "ngroups"), "</p>"),
-       fb = hug_fb(f1, q1))
+       fb = hug_fb(f1, q1),
+       solution = mml$res)
 }
 
 anova_n_participants <- function(tbl) {
@@ -150,7 +153,8 @@ anova_n_participants <- function(tbl) {
   q1 <- glue::glue("Wie viele Personen haben am Experiment teilgenommen?")
   f1 <- glue::glue("Hierfür kann man die Formel für die Freiheitsgrade der Residuen nach der Anzahl der Messungen {M(n)} umstellen, wobei {M(k)} die Anzahl der Bedingungen ist:", mml$mml)
   list(q = list("<p>", q1, numericGap(mml$res, "nparticip"), "</p>"),
-       fb = hug_fb(f1, q1))
+       fb = hug_fb(f1, q1),
+       solution = mml$res)
 }
 
 anova_significant <- function(tbl) {
@@ -161,7 +165,8 @@ anova_significant <- function(tbl) {
   list(q = list("<p>", q,
                 numericGap(as.numeric(p <= alpha), "significant"),
                 "</p>"),
-       fb = hug_fb(f, q))
+       fb = hug_fb(f, q),
+       solution = as.numeric(p <= alpha))
 }
 
 anova_f <- function(tbl) {
@@ -171,7 +176,8 @@ anova_f <- function(tbl) {
   q1 <- glue::glue("Wie groß ist der F-Wert?")
   f1 <- paste("Die mittleren Quadratsummen entsprechen den Varianzschätzungen, deren Verhältnis wiederum den F-Wert bildet:", mml$mml)
   list(q = list("<p>", q1, numericGap(mml$res, "fvalue"), "</p>"),
-       fb = hug_fb(f1, q1))
+       fb = hug_fb(f1, q1),
+       solution = mml$res)
 }
 
 # besser bei between?
@@ -182,7 +188,8 @@ anova_varpop <- function(tbl) {
   f <- paste("Wenn die H0 nicht stimmt, dann lässt sich die Varianz der Mittelwerte zwischen den Gruppen nicht für die Schätzung der Populationsvarianz verwenden. Die beste Schätzung wäre also die durchschnittliche Varianz innerhalb der Gruppen (Mean Sq, Residuals):", sigma["res"])
   list(q = list("<p>", q, numericGap(as.numeric(sigma["res"]), "varpop"),
                 "</p>"),
-       fb = hug_fb(f, q))
+       fb = hug_fb(f, q),
+       solution = as.numeric(sigma["res"]))
 }
 
 anova_fcritical <- function(tbl)  {
@@ -193,23 +200,36 @@ anova_fcritical <- function(tbl)  {
   list(q = list("<p>", q, numericGap(fcrit, tolerance = 1,
                                      tolerance_type = "absolute"),
                 "</p>"),
-       fb = hug_fb(f, q))
+       fb = hug_fb(f, q),
+       solution = fcrit)
 }
 
+anova_questions <- function(tbl, qs_ges) {
+  q1 <- anova_eta2p(tbl)
+  q2 <- anova_n_groups(tbl)
+  q3 <- anova_n_participants(tbl)
+  q4 <- anova_significant(tbl)
+  q5 <- anova_f(tbl)
+  q6 <- anova_eta2_person(tbl, qs_ges)
+  q7 <- anova_varpop(tbl)
+  q8 <- anova_fcritical(tbl)
+  q <- list(q1, q2, q3, q4, q5, q6, q7, q8)
+  q
+}
+
+#' anova exercise
+#'
+#' A realistic within ANOVA output is presented based on a real study. 8
+#' questions have to be answered. This is the raw version, producing an rqti
+#' Entry object.
+#' @param seed Seed for the exercise. Default is a random seed drawn from 1:1e5.
+#' @return rqti Entry object
+#' @example a <- anova()
+#' @export
 anova <- function(seed = sample.int(1e5, 1)) {
   a <- anova_example(seed)
-
-  q1 <- anova_eta2p(a$mdl$tbl)
-  q2 <- anova_n_groups(a$mdl$tbl)
-  q3 <- anova_n_participants(a$mdl$tbl)
-  q4 <- anova_significant(a$mdl$tbl)
-  q5 <- anova_f(a$mdl$tbl)
-  q6 <- anova_eta2_person(a$mdl$tbl, a$qs_ges)
-  q7 <- anova_varpop(a$mdl$tbl)
-  q8 <- anova_fcritical(a$mdl$tbl)
-  q <- list(q1, q2, q3, q4, q5, q6, q7, q8)
+  q <- anova_questions(a$mdl$tbl, a$qs_ges)
   questions <- sapply(q, function(x) x$q)
-
   feedback <- unlist(lapply(q, function(x) textutils::HTMLdecode(x$fb)))
 
   QS <- NULL
@@ -225,11 +245,25 @@ anova <- function(seed = sample.int(1e5, 1)) {
       content = content, feedback = list(fb))
 }
 
-anova_stud <- function(seed = 1:20) {
-  x <- lapply(seed, anova)
+#' anova test (student version)
+#'
+#' A realistic within ANOVA output is presented based on a real study. 8
+#' questions have to be answered. This is the student version, containing 20
+#' versions by default wrapped into a QTI test. One version is selected randomly
+#' by default.
+#'
+#' @param seed Seed for the exercise, can also be a vector to produce several
+#'   versions of the exercise. Default is a vector from 1:20.
+#' @param selection How many exercises should be selected. Has to be smaller
+#'   than length of seed.
+#' @example a <- anova_stud()
+#' @return rqti test object
+#' @export
+anova_stud <- function(seed = 1:20, selection = 1) {
+  x <- lapply(seed, anova_one)
   s <- new("AssessmentSection", visible = FALSE,
-           assessment_item = x, selection = 1)
-  test <- new("AssessmentTestOpal", identifier = "anova_stud",
+           assessment_item = x, selection = selection)
+  test <- new("AssessmentTestOpal", identifier = "anova",
               section = list(s), files = get_supplement_paths(),
               calculator = "scientific")
   test
