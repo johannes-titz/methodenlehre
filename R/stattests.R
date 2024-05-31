@@ -1,5 +1,6 @@
-#' stattest exercise
-#' 
+#' stattests exercise
+#'
+#'
 #' The exercise consists of selecting the appropriate test for a study. There are 14 variants and 12 different tests.
 #' @param n_questions number of questions to create
 #' @return list of exercises
