@@ -8,7 +8,7 @@
 #' @export
 zstand <- function(seed = sample.int(1e4, 1)) {
   z <- lapply(seed, zstand_one)
-  if (length(b) == 1) z <- z[[1]]
+  if (length(z) == 1) z <- z[[1]]
   z
 }
 
