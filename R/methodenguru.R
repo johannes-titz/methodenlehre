@@ -17,7 +17,7 @@ methodenguru_node_id <- function(shortName) {
 #' Data from opal methodenguru course
 #'
 #' @param shortName Short name of exercise.
-#' @path where to download to
+#' @param path where to download to
 #' @export
 methodenguru_data <- function(shortName, path = "data-raw/results/") {
   node_id <- methodenguru_node_id(shortName)
