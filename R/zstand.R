@@ -1,12 +1,18 @@
 #' Exercise zstand
 #'
 #' In this exercise the candidate has to calculate the raw value of a z-value and also find out the corresponding p-value for the z-value.
-#' @param seed See for the exercise.
-#' @return Entry rqti object
+#' @param seed Seed for the exercise. Can be a vector to produce several versions.
+#' @return Entry rqti object for one seed, or list of Entry rqti objects for several seeds.
 #' @examples
 #' z <- zstand()
 #' @export
 zstand <- function(seed = sample.int(1e4, 1)) {
+  z <- lapply(seed, zstand_one)
+  if (length(b) == 1) z <- z[[1]]
+  z
+}
+
+zstand_one <- function(seed = sample.int(1e4, 1)) {
   set.seed(seed)
   z <- abs(round(rnorm(1), 2))
   i <- mml_eq(x <- 15L*z + 100L, T, round = 0)
@@ -20,7 +26,8 @@ zstand <- function(seed = sample.int(1e4, 1)) {
   fb2 <- glue::glue("<p>Für die Berechnung der Wahrscheinlichkeit schauen wir in der {M(z)}-Tabelle nach dem zugehörigen {M(p)}-Wert: {mml_eq(pnorm(z))}. Dies ist allerdings genau die Gegenwahrscheinlichkeit, die uns angibt wie viele Personen einen niedrigeren IQ-Wert haben. Gefragt ist allerdings nach dem vorliegenden IQ-Wert oder einem höheren, wir rechnen also: {p$mml}.</p><p>Zusatzinformationen: Hochbegabung beginnt bei +2 SD, also einem z-Wert von 2, bzw. 130 IQ-Punkten. Der entsprechende p-Wert ist 0.023.</p>")
   feedback <- modalFeedback(list(fb1, fb2))
 
-  entry <- entry("z", content = list(text, "<p>IQ (gerundet auf eine ganze Zahl):",
+  entry <- entry("z-Standardisierung",
+                 content = list(text, "<p>IQ (gerundet auf eine ganze Zahl):",
                                      gap1, "</p><p>", text2, gap2, "</p>"),
                  identifier = paste0("zstand", seed),
                  feedback = list(feedback))
@@ -29,7 +36,7 @@ zstand <- function(seed = sample.int(1e4, 1)) {
 }
 
 zstand_stud <- function(seeds = 1:20) {
-  x <- lapply(seeds, zstand)
+  x <- zstand(seeds)
   s <- section(x, selection = 1)
   test4opal(s, identifier = "zstand_stud", files = get_supplement_paths())
 }
