@@ -34,3 +34,23 @@ Suggests:
 Config/testthat/edition: 3
 Collate:
     helpers.R
+    anova.R
+    bayes.R
+    ca.R
+    faktorenanalyse.R
+    ki-bin.R
+    lagemaße.R
+    metaanalyse.R
+    methodenlehre-package.R
+    power.R
+    power2.R
+    power_type.R
+    regression.R
+    regression_multiple.R
+    skalenniveau.R
+    stattests.R
+    ttest.R
+    utils-pipe.R
+    validity.R
+    wissenschaftstheorie.R
+    zstand.R
