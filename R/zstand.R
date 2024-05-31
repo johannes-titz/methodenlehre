@@ -1,3 +1,11 @@
+#' Exercise zstand
+#'
+#' In this exercise the candidate has to calculate the raw value of a z-value and also find out the corresponding p-value for the z-value.
+#' @param seed See for the exercise.
+#' @return Entry rqti object
+#' @examples
+#' z <- zstand()
+#' @export
 zstand <- function(seed = sample.int(1e4, 1)) {
   set.seed(seed)
   z <- abs(round(rnorm(1), 2))
