@@ -10,7 +10,8 @@ df2sctable(
   title = identifier,
   shuffle = T,
   story,
-  feedback = ""
+  feedback = "",
+  points = nrow(df)/2
 )
 }
 \arguments{

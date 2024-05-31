@@ -4,7 +4,7 @@
 \alias{mml_eq}
 \title{transform r expression to mml with solution}
 \usage{
-mml_eq(orig_expr, return_result = F, flags = list(quote(round(3L))))
+mml_eq(orig_expr, return_result = F, flags = list(quote(round(3L))), round = 3)
 }
 \description{
 transform r expression to mml with solution
