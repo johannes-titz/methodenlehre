@@ -12,7 +12,7 @@ methodenguru_node_id <- function(shortName) {
   d$nodeId[d$shortName == shortName]
 }
 
-methodenguru_data <- function(shortName, path = ".") {
+methodenguru_data <- function(shortName, path = "data-raw/results/") {
   node_id <- methodenguru_node_id(shortName)
   get_course_results(methodenguru_resource_id(), node_id, path = path)
 }
