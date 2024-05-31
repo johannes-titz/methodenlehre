@@ -174,8 +174,12 @@ webshot_opal <- function(url, file) {
 
 #' @export
 mycor <- function(x, y) {
-  if (sd(x) == 0) return(NA)
-  if (sd(y) == 0) return(NA)
+  x_ok <- sd(x) == 0
+  y_ok <- sd(y) == 0
+  x_ok <- ifelse(is.na(x_ok), F, T)
+  y_ok <- ifelse(is.na(y_ok), F, T)
+  if (!x_ok) return(NA)
+  if (!y_ok) return(NA)
   cor(x, y)
 }
 
