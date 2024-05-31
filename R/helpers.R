@@ -242,7 +242,7 @@ hug_fb <- function(fb, summary) {
 #' Prepares data for subsequent analysis. This is for independent exercises, not
 #' exams. Summarizes overall score for the exercise, which allows to calculate
 #' r_it on item level.
-prepare_items_stud <- function(d) {
+prepare_items <- function(d, percent_complete = 0.5) {
   d2 <- d %>%
     # transform to numerics
     mutate(score_candidate = as.numeric(score_candidate),
@@ -250,25 +250,24 @@ prepare_items_stud <- function(d) {
     group_by(file) %>%
     # calculate overall score of candidate and how many answers were given
     mutate(score = sum(score_candidate),
-           sum_answer_given = sum(as.logical(candidate_response)),
+           sum_answer_given = sum(as.logical(candidate_response != "")),
            N = n()) %>%
            #select(-id_question) %>% # always the same?
-    filter(sum_answer_given == max(N)) # fully answered only
+    filter(sum_answer_given/N >= percent_complete) # fully answered only
   d2
 }
 
 #' d has to be prepared accordingly so that it contains the overall score of the
-#' candidate (score_candidate"). See `prepare_items_stud`.
-analysis_items_default <- function(d) {
-  #
-  #d$title <- ifelse(is.null(d$title), d$id_question, d$title)
-  d$duration <- ifelse(is.null(d$duration), NA, d$duration)
+#' candidate (score_candidate"). See `prepare_items`.
+#'
+#' @return tibble with id_answer, r_it, P, and n (number of answers)
+analysis_items_default <- function(d, groups = c("id_answer")) {
   qs <- d %>%
-    group_by(id_question) %>%
+    prepare_items() %>%
+    group_by_at(groups) %>%
     summarize(r_it = mycor(score_candidate, score - score_candidate),
-              P = mean(score_candidate) / mean(score_max))#,
-              #dur = mean(duration),
-              #n = dplyr::n()) %>%
+              P = mean(score_candidate) / mean(score_max),
+              n = n()) %>%
     filter(!is.na(r_it))
   qs
 }
