@@ -7,13 +7,13 @@
 #- maybe add more calculation examples?
 
 ma_gap <- function(solution) {
-    gap_numeric(solution, tolerance = 1, tolerance_type = "relative", 
+    gap_numeric(solution, tolerance = 1, tolerance_type = "relative",
                 expected_length = 2)
 }
 
 ma_n <- function() {
-      round(EnvStats::rnorm(1, 150, 25))
-  }
+  round(rnorm(1, 150, 25))
+}
 
 random_r <- function() {
   round(EnvStats::rnormTrunc(1, 0.15, 0.3, 0.1, 0.7), 2)
@@ -23,7 +23,7 @@ study_d <- function() {
   # es d
   study_d <- tibble::lst(stat = round(EnvStats::rnormTrunc(1, 0.3, 1, 0.1, 1.5), 2), n = ma_n())
   study_d$n <- ifelse(study_d$n %% 2 == 0, study_d$n, study_d$n - 1)
-  study_d$r_espkg <- d_to_r(study_d$stat)
+  study_d$r_espkg <- effectsize::d_to_r(study_d$stat)
   d <- study_d$stat
   n <- study_d$n
   mml <- mml_eq(r <- dfrac(d, sqrt(d^2L + 4L)), return_result = T)
@@ -40,7 +40,7 @@ study_F <- function() {
   df["inn"] <- ma_n()
   r <- random_r()
   F <- round(r^2*df["inn"] / (1-r^2), 2) # check
-  study_F <- tibble::lst(df_inn = df["inn"], 
+  study_F <- tibble::lst(df_inn = df["inn"],
                   stat = F, r = r)
   mml_r <- mml_eq(r <- dfrac(F, F + df["inn"]), T)
   mml_n <- mml_eq(n <- df["inn"] + 2L, T)
@@ -74,15 +74,13 @@ study_eta2 <- function() {
   eta <- r
   mml_r <- mml_eq(r <- sqrt(eta^2L), T)
   question <- glue::glue("Studie mit {mml_eq(eta^2L)} und {mml_eq(df)}")
-  study <- tibble::lst(n = ma_n(), fb = mml_r$mml, 
+  study <- tibble::lst(n = ma_n(), fb = mml_r$mml,
                        solution = mml_r$res, question, r)
   study$title <- paste("Effektgröße", mathml(quote(eta^2L)))
   study
 }
 
 metaanalyse <- function() {
-  #librarian::shelf(EnvStats, effectsize)
-
   l <- tibble::lst(study_eta2(), study_t(), study_F(), study_d())
   lnames <- names(l)
   d <- dplyr::bind_rows(l)
@@ -90,10 +88,10 @@ metaanalyse <- function() {
   d <- d %>%
       dplyr::mutate(id = lnames, solution = round(solution, 2),
       tolerance = 1, tolerance_type = "relative")
-      
+
   sedlmeier <- 0.27
   sedlmeier_n <- 855
-  
+
   rs <- c(sedlmeier, d$solution)
   Ns <- c(sedlmeier_n, d$n)
   mean_effect <- round(weighted.mean(rs, Ns), 2)
@@ -102,12 +100,12 @@ metaanalyse <- function() {
   final_question <- list("Berechnen Sie nun die an der Stichprobe gewichtete mittlere Effektgröße, inklusive der Original-Studie von Sedlmeier et al. (2012).", ma_gap(mean_effect))
   final_fb <- ma_fb_final(rs, Ns)
 
-  fb <- paste0("<details><summary>", c(d$title, "mittlere, gewichtete ES"), "</summary>", c(d$fb, final_fb), 
+  fb <- paste0("<details><summary>", c(d$title, "mittlere, gewichtete ES"), "</summary>", c(d$fb, final_fb),
   "</details>")
   content <- list(story, final_question)
   content <- append(questions, story, 1)
-  new("Entry", identifier = "metaanalyse", content = content)#, feedback = list(new("ModalFeedback", content = list(fb))))
-  fb
+  new("Entry", identifier = "metaanalyse", content = content,
+      feedback = list(new("ModalFeedback", content = list(fb))))
 }
 
 ma_story <- function(r, n) {
@@ -141,8 +139,8 @@ Folgende Statistiken stehen für die zusätzlichen Studien zur Verfügung. Gehen
 #<details >
 # <summary>Statistik $F$</summary>
 #
-# Bei 1 Freiheitsgrad (between), ist der $F$-Wert einfach nur $t^2$sodass ähnlich zum $t$-Beispiel gilt: 
-# 
+# Bei 1 Freiheitsgrad (between), ist der $F$-Wert einfach nur $t^2$sodass ähnlich zum $t$-Beispiel gilt:
+#
 # $$r = \sqrt{\frac{F}{F+\mathrm{df_\mathrm{inn}}}} = \sqrt{\frac{ `r study_F$stat` }{`r study_F$stat` + `r study_F$df`}} = `r study_F$r`$$
 #
 #</details>
