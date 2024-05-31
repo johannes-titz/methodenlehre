@@ -234,3 +234,67 @@ hug_fb <- function(fb, summary) {
   list("<p><details><summary>", summary, "</summary>",
        fb, "</details></p>")
 }
+
+#' Prepares data for subsequent analysis. This is for independent exercises, not
+#' exams. Summarizes overall score for the exercise, which allows to calculate
+#' r_it on item level.
+prepare_items_stud <- function(d) {
+  d2 <- d %>%
+    # transform to numerics
+    mutate(score_candidate = as.numeric(score_candidate),
+           score_max = as.numeric(score_max)) %>%
+    group_by(file) %>%
+    # calculate overall score of candidate and how many answers were given
+    mutate(score = sum(score_candidate),
+           sum_answer_given = sum(as.logical(candidate_response)),
+           N = n()) %>%
+           #select(-id_question) %>% # always the same?
+    filter(sum_answer_given == max(N)) # fully answered only
+  d2
+}
+
+#' d has to be prepared accordingly so that it contains the overall score of the
+#' candidate (score_candidate"). See `prepare_items_stud`.
+analysis_items_default <- function(d) {
+  #
+  #d$title <- ifelse(is.null(d$title), d$id_question, d$title)
+  d$duration <- ifelse(is.null(d$duration), NA, d$duration)
+  qs <- d %>%
+    group_by(id_question) %>%
+    summarize(r_it = mycor(score_candidate, score - score_candidate),
+              P = mean(score_candidate) / mean(score_max))#,
+              #dur = mean(duration),
+              #n = dplyr::n()) %>%
+    filter(!is.na(r_it))
+  qs
+}
+
+#' exercise level, treat each exercise as unit, e.g. can be used for
+#' skalenniveaus or for exams?
+
+prepare_data_exercises <- function(d) {
+  sk2 <- d %>%
+    group_by(file) %>%
+    mutate(score = sum(score_candidate),
+           sum_answer_given = sum(is_answer_given),
+           n = n()) %>%
+    filter(sum_answer_given == max(n)) # only fully answered
+  sk2
+}
+
+#' default analysis on exercises level, return r_it, difficulty (P), duration
+#' (dur), number of items
+analysis_exercises_default <- function(d) {
+  sk3 <- d %>%
+    prepare_data_exercises() %>%
+    group_by(id_question) %>%
+    summarize(r_it = cor(score_candidate, score-score_candidate),
+              P = mean(score_candidate) / mean(score_max),
+              dur = mean(duration), n = n())
+  sk3
+}
+
+copy_opal_archive <- function() {
+  file.copy("/home/jt/mnt/opal/home/private/archive/methoden.guru", "data-raw/",
+            recursive = TRUE)
+}
