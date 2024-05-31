@@ -7,10 +7,10 @@
 zstand(seed = sample.int(10000, 1))
 }
 \arguments{
-\item{seed}{See for the exercise.}
+\item{seed}{Seed for the exercise. Can be a vector to produce several versions.}
 }
 \value{
-Entry rqti object
+Entry rqti object for one seed, or list of Entry rqti objects for several seeds.
 }
 \description{
 In this exercise the candidate has to calculate the raw value of a z-value and also find out the corresponding p-value for the z-value.

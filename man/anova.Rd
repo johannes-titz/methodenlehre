@@ -4,7 +4,7 @@
 \alias{anova}
 \title{anova exercise}
 \usage{
-anova(seed = sample.int(100000, 1))
+anova(seed = sample.int(1e+05, 1))
 }
 \arguments{
 \item{seed}{Seed for the exercise. Default is a random seed drawn from 1:1e5.}

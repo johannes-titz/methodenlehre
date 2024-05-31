@@ -2,7 +2,7 @@
 % Please edit documentation in R/stattests.R
 \name{stattest}
 \alias{stattest}
-\title{stattest exercise}
+\title{stattests exercise}
 \usage{
 stattest(n_questions = 1)
 }

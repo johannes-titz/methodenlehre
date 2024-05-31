@@ -6,7 +6,7 @@
 \usage{
 regression(
   study = sample(prep_functions(), 1),
-  seed = sample.int(1000000, 1),
+  seed = sample.int(1e+06, 1),
   which_questions = 1:11
 )
 }
