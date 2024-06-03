@@ -119,7 +119,6 @@ lagemaße_davis <- function(dv = NULL,
     tibble::lst(vector, story, seed, name = "Davis")
 }
 
-#'
 #' Create qti item for lagemaße
 #'
 #' @param dv dependent variable, numeric vector
@@ -143,13 +142,15 @@ lagemaße2 <- function(dv, story,
                           "Interquartilsabstand", "Mittelwert", "Varianz",
                           "Standardabweichung", "Mittlerer absoluter Abstand",
                           "Range"),
-                      identifier = "lagemaße") {
-    # seed einbeziehen?
-    # questions by question_df berücksichtigen?
-    # generate qti questions from dv
+                      identifier = "lagemasse") {
+  # seed einbeziehen?
+  # questions by question_df berücksichtigen?
+  # generate qti questions from dv
   qdf <- lagemaße_qdf(dv)
   qdf <- qdf %>%
-      dplyr::filter(question %in% !!question)
+    mutate(id = row.names(qdf)) %>%
+    dplyr::filter(question %in% !!question)
+
   res <- unlist(df2gap(qdf), use.names = F)
   res <- append(res, story, 0)
 
@@ -178,22 +179,22 @@ lagemaße2 <- function(dv, story,
 #' question vector that can be used as input for lagemaße functions
 lagemaße_question <- function() {unlist(lagemaße_qdf(1:10)$question)}
 
-#'
+#' Exercise lagemaße
 #'
 #' lagemaße creates a qti Entry exercise for descriptive statistics
 #'
-#' @param study list with elements vector, story and seed
-#' @param question question data frame
+#' @param study list with elements vector, story and seed, by default
+#'   lagemaße_davis()
+#' @param question question data frame, default is lagemaße_question()
 #'
-#' @return Entry object of qti class
+#' @return Entry object of rqti class
 #'
-#' @details
-#' Check out the defaults, which are just functions to generate vector, story
-#' and the question data frame.
+#' @details Check out the defaults, which are just functions to generate vector,
+#' story and the question data frame.
 #' @export
 lagemaße <- function(study = lagemaße_davis(), question = lagemaße_question()) {
     lagemaße2(study$vector, study$story,
-              identifier = paste0("lagemaße", study$name, "S", study$seed),
+              identifier = paste0("lagemasse", study$name, "S", study$seed),
               question = question)
 }
 
@@ -204,8 +205,8 @@ lagemaße <- function(study = lagemaße_davis(), question = lagemaße_question()
 #' for an exam.
 #'
 #' @export
-lagemaße_klausur <- function(seed, question = lagemaße_question()[c(1:3, sample(4:5, 1))]) {
-  lapply(seed, function(x) lagemaße(lagemaße_davis(seed = x), question))
+lagemaße_klausur <- function(seeds, question = lagemaße_question()[c(1:3, sample(4:5, 1))]) {
+  lapply(seeds, function(x) lagemaße(lagemaße_davis(seed = x), question))
 }
 
 #'
@@ -228,12 +229,13 @@ s2 <- function(seed) {
 # für studis: vektor-länge, auswahl der statistiken
 # gerade zahl, ungerade zahl, var/sd trennen?
 
+#' Exercise lagemaße (student version)
 #'
-#' lagemaße default exercise for students with two sections, each containing
-#' 20 different variants, the first focusing on simple calculations, the second
-#' on more complex ones. One of each section is selected randomly. Stat tables and formulas are provided, as well as
-#' the scientific calculator. This is OPAL-specific, not tested on other qti
-#' platforms.
+#' lagemaße default exercise for students with two sections, each containing 20
+#' different variants, the first focusing on simple calculations, the second on
+#' more complex ones. One of each section is selected randomly. Stat tables and
+#' formulas are provided, as well as the scientific calculator. This is
+#' OPAL-specific, not tested on other qti platforms.
 lagemaße_studis <- function() {
     s1_list <- lapply(1:20, s1)
     s2_list <- lapply(21:40, s2)
@@ -242,7 +244,7 @@ lagemaße_studis <- function() {
     s2 <- new("AssessmentSection", assessment_item = s2_list, selection = 1,
               identifier = "section2")
     test <- new("AssessmentTestOpal", section = list(s1, s2),
-                identifier = "lagemaße",
+                identifier = "lagemasse",
                 files = get_supplement_paths(),
                 calculator = "scientific-calculator")
     test
