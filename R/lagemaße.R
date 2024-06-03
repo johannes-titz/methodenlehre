@@ -182,15 +182,17 @@ lagemaße_question <- function() {unlist(lagemaße_qdf(1:10)$question)}
 #' Exercise lagemaße
 #'
 #' lagemaße creates a qti Entry exercise for descriptive statistics
-#'
+#' @param seed seed which is passed to study function by default. If you use
+#'   your own study function, this is ignored, unless you pass it directly to
+#'   your function.
 #' @param study list with elements vector, story and seed, by default
-#'   lagemaße_davis()
+#'   lagemaße_davis() with seed taken from
 #' @param question question data frame, default is lagemaße_question()
 #'
 #' @return Entry object of rqti class
 #'
 #' @details Check out the defaults, which are just functions to generate vector,
-#' story and the question data frame.
+#'   story and the question data frame.
 #' @export
 lagemaße <- function(seed = sample.int(1e4, 1),
                      study = lagemaße_davis(seed = seed),
