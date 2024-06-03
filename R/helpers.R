@@ -291,7 +291,7 @@ analysis_exercises_default <- function(d) {
   sk3 <- d %>%
     prepare_data_exercises() %>%
     group_by(id_question) %>%
-    summarize(r_it = cor(score_candidate, score-score_candidate),
+    summarize(r_it = cor(score_candidate, sum_score-score_candidate),
               P = mean(score_candidate) / mean(score_max),
               dur = mean(duration), n = n())
   sk3
@@ -300,4 +300,13 @@ analysis_exercises_default <- function(d) {
 copy_opal_archive <- function() {
   file.copy("/home/jt/mnt/opal/home/private/archive/methoden.guru", "data-raw/",
             recursive = TRUE)
+}
+
+screenshot_chromote <- function(url) {
+  b <- ChromoteSession$new()
+  b$Page$navigate(url)
+  b$Page$loadEventFired()
+  b$Page$navigate("https://bildungsportal.sachsen.de/onyx/test?")
+  b$Page$loadEventFired()
+  b$screenshot(selector = "#main-content")
 }
