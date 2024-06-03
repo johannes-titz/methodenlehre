@@ -192,7 +192,9 @@ lagemaße_question <- function() {unlist(lagemaße_qdf(1:10)$question)}
 #' @details Check out the defaults, which are just functions to generate vector,
 #' story and the question data frame.
 #' @export
-lagemaße <- function(study = lagemaße_davis(), question = lagemaße_question()) {
+lagemaße <- function(seed = sample.int(1e4, 1),
+                     study = lagemaße_davis(seed = seed),
+                     question = lagemaße_question()) {
     lagemaße2(study$vector, study$story,
               identifier = paste0("lagemasse", study$name, "S", study$seed),
               question = question)
