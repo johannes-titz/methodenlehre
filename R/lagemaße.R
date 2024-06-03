@@ -202,15 +202,27 @@ lagemaße <- function(seed = sample.int(1e4, 1),
               question = question)
 }
 
-#' returns list of seed lagemaße exercises
+#' Exercise lagemaße (exam version)
 #'
-#' @details
-#' Note that variance is computing extensive, so you might not want to use that
-#' for an exam.
+#' This is a helper function to create a list of lagemaße exercises for exams.
+#'
+#' @param seeds seeds for exercises
+#' @param question
+#' @return list of Entry rqti objects
+#'
+#' @details This is useful to create parallel versions of the exercise for an
+#'   exam. It always takes the same questions, but varies other aspects of the
+#'   exercise. Long calculations are avoided by not taking variance, sd, mad.
+#'   Currently there is only one lagemaße data creation function, so this is
+#'   taken (lagemaße_davis).
 #'
 #' @export
-lagemaße_klausur <- function(seeds, question = lagemaße_question()[c(1:3, sample(4:5, 1))]) {
-  lapply(seeds, function(x) lagemaße(lagemaße_davis(seed = x), question))
+lagemaße_klausur <- function(
+    seeds,
+    question = lagemaße_question()[c(1:3, sample(c(4, 5, 9), 1))]
+) {
+  ex <- lapply(seeds, function(x) lagemaße(lagemaße_davis(seed = x), question))
+  ex
 }
 
 #'
