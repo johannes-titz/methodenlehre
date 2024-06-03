@@ -37,6 +37,6 @@ zstand_one <- function(seed = sample.int(1e4, 1)) {
 
 zstand_stud <- function(seeds = 1:20) {
   x <- zstand(seeds)
-  s <- section(x, selection = 1)
+  s <- section(x, selection = 1, visible = F)
   test4opal(s, identifier = "zstand_stud", files = get_supplement_paths())
 }
