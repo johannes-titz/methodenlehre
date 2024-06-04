@@ -221,8 +221,15 @@ lagemaße_klausur <- function(
     seeds,
     question = lagemaße_question()[c(1:3, sample(c(4, 5, 9), 1))]
 ) {
-  ex <- lapply(seeds, function(x) lagemaße(lagemaße_davis(seed = x), question))
+  ex <- lapply(seeds, function(x) lagemaße(study = lagemaße_davis(seed = x),
+                                           question = question))
   ex
+}
+
+lagemaße_all <- function(seeds = 1:20) {
+  ex <- lagemaße_klausur(seeds, question = lagemaße_question())
+  s <- section(ex, selection = 1)
+  test(s)
 }
 
 #'
