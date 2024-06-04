@@ -308,5 +308,5 @@ screenshot_chromote <- function(url) {
   b$Page$loadEventFired()
   b$Page$navigate("https://bildungsportal.sachsen.de/onyx/test?")
   b$Page$loadEventFired()
-  b$screenshot(selector = "#main-content")
+  b$screenshot(selector = "#main-content", scale = 1.5)
 }
