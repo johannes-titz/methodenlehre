@@ -228,8 +228,8 @@ lagemaße_klausur <- function(
 
 lagemaße_all <- function(seeds = 1:20) {
   ex <- lagemaße_klausur(seeds, question = lagemaße_question())
-  s <- section(ex, selection = 1)
-  test(s)
+  s <- section(ex, selection = 1, visible = F)
+  test(s, identifier = "lagemasse_all")
 }
 
 #'
