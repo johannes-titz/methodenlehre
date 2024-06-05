@@ -207,7 +207,7 @@ lagemaße <- function(seed = sample.int(1e4, 1),
 #' This is a helper function to create a list of lagemaße exercises for exams.
 #'
 #' @param seeds seeds for exercises
-#' @param question
+#' @param question selection from `lagemaße_question()`
 #' @return list of Entry rqti objects
 #'
 #' @details This is useful to create parallel versions of the exercise for an
