@@ -302,8 +302,8 @@ copy_opal_archive <- function() {
             recursive = TRUE)
 }
 
-screenshot_chromote <- function(url) {
-  b <- ChromoteSession$new()
+screenshot_chromote <- function(url, height = 1080) {
+  b <- ChromoteSession$new(height = height)
   b$Page$navigate(url)
   b$Page$loadEventFired()
   b$Page$navigate("https://bildungsportal.sachsen.de/onyx/test?")
