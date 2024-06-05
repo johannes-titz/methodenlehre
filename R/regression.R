@@ -330,7 +330,8 @@ get_questions <- function(parameters, variables_md) {
 #' @param which_questions integer vector for question selection
 #' @return rqti Entry object
 #' @export
-regression <- function(study = sample(prep_functions(), 1), seed = sample.int(1e6, 1),
+regression <- function(study = sample(prep_functions(), 1),
+                       seed = sample.int(1e6, 1),
                        which_questions = 1:11) {
   set.seed(seed)
   ex <- regression_example(study, seed)
