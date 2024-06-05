@@ -329,10 +329,9 @@ get_questions <- function(parameters, variables_md) {
 #' @param seed seed for randomization
 #' @param which_questions integer vector for question selection
 #' @return rqti Entry object
-#' @export
-regression <- function(study = sample(prep_functions(), 1),
-                       seed = sample.int(1e6, 1),
-                       which_questions = 1:11) {
+regression_one <- function(seed = sample.int(1e6, 1),
+                           study = sample(prep_functions(), 1),
+                           which_questions = 1:11) {
   set.seed(seed)
   ex <- regression_example(study, seed)
   content <- prepare_html(ex)
@@ -345,6 +344,25 @@ regression <- function(study = sample(prep_functions(), 1),
   new("Entry", identifier = paste0("regression", seed), content = cont,
       feedback = list(feedback))
 }
+
+#' Exercise regression
+#'
+#' In this exercise the student gets a regression table and graphic and must
+#' answer 11 questions.
+#'
+#' @param study Study scenario, by default a random one is drawn. Check out the function `pref_functions()` for all studies.
+#' @param seed seed for randomization
+#' @param which_questions integer vector for question selection
+#' @return rqti Entry object
+#' @export
+regression <- function(seeds = sample.int(1e6, 1),
+                       study = sample(prep_functions(), 1),
+                       which_questions = 1:11) {
+  ex <- lapply(seeds, regression_one)
+  if (length(ex) == 1) ex <- ex[[1]]
+  ex
+}
+
 
 #' Exercise regression (student versions)
 #'
