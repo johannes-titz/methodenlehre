@@ -10,7 +10,7 @@ lagemaße2(
   question = c("Median", "Unteres Quartil", "Oberes Quartil", "Interquartilsabstand",
     "Mittelwert", "Varianz", "Standardabweichung", "Mittlerer absoluter Abstand",
     "Range"),
-  identifier = "lagemaße"
+  identifier = "lagemasse"
 )
 }
 \arguments{

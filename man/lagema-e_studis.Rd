@@ -2,18 +2,14 @@
 % Please edit documentation in R/lagemaße.R
 \name{lagemaße_studis}
 \alias{lagemaße_studis}
-\title{lagemaße default exercise for students with two sections, each containing
-20 different variants, the first focusing on simple calculations, the second
-on more complex ones. One of each section is selected randomly. Stat tables and formulas are provided, as well as
-the scientific calculator. This is OPAL-specific, not tested on other qti
-platforms.}
+\title{Exercise lagemaße (student version)}
 \usage{
 lagemaße_studis()
 }
 \description{
-lagemaße default exercise for students with two sections, each containing
-20 different variants, the first focusing on simple calculations, the second
-on more complex ones. One of each section is selected randomly. Stat tables and formulas are provided, as well as
-the scientific calculator. This is OPAL-specific, not tested on other qti
-platforms.
+lagemaße default exercise for students with two sections, each containing 20
+different variants, the first focusing on simple calculations, the second on
+more complex ones. One of each section is selected randomly. Stat tables and
+formulas are provided, as well as the scientific calculator. This is
+OPAL-specific, not tested on other qti platforms.
 }

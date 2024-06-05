@@ -2,14 +2,26 @@
 % Please edit documentation in R/lagemaße.R
 \name{lagemaße_klausur}
 \alias{lagemaße_klausur}
-\title{returns list of seed lagemaße exercises}
+\title{Exercise lagemaße (exam version)}
 \usage{
-lagemaße_klausur(seed, question = lagemaße_question()[c(1:3, sample(4:5, 1))])
+lagemaße_klausur(
+  seeds,
+  question = lagemaße_question()[c(1:3, sample(c(4, 5, 9), 1))]
+)
+}
+\arguments{
+\item{seeds}{seeds for exercises}
+}
+\value{
+list of Entry rqti objects
 }
 \description{
-returns list of seed lagemaße exercises
+This is a helper function to create a list of lagemaße exercises for exams.
 }
 \details{
-Note that variance is computing extensive, so you might not want to use that
-for an exam.
+This is useful to create parallel versions of the exercise for an
+exam. It always takes the same questions, but varies other aspects of the
+exercise. Long calculations are avoided by not taking variance, sd, mad.
+Currently there is only one lagemaße data creation function, so this is
+taken (lagemaße_davis).
 }

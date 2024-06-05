@@ -2,22 +2,31 @@
 % Please edit documentation in R/lagemaße.R
 \name{lagemaße}
 \alias{lagemaße}
-\title{lagemaße creates a qti Entry exercise for descriptive statistics}
+\title{Exercise lagemaße}
 \usage{
-lagemaße(study = lagemaße_davis(), question = lagemaße_question())
+lagemaße(
+  seed = sample.int(10000, 1),
+  study = lagemaße_davis(seed = seed),
+  question = lagemaße_question()
+)
 }
 \arguments{
-\item{study}{list with elements vector, story and seed}
+\item{seed}{seed which is passed to study function by default. If you use
+your own study function, this is ignored, unless you pass it directly to
+your function.}
 
-\item{question}{question data frame}
+\item{study}{list with elements vector, story and seed, by default
+lagemaße_davis() with seed taken from}
+
+\item{question}{question data frame, default is lagemaße_question()}
 }
 \value{
-Entry object of qti class
+Entry object of rqti class
 }
 \description{
 lagemaße creates a qti Entry exercise for descriptive statistics
 }
 \details{
-Check out the defaults, which are just functions to generate vector, story
-and the question data frame.
+Check out the defaults, which are just functions to generate vector,
+story and the question data frame.
 }
