@@ -180,11 +180,8 @@ bayes <- function(seed = sample.int(1e3, 1)) {
   b
 }
 
-#
-# bayes_studis <- function(seeds = 1:20) {
-#   exercises <- lapply(seeds, bayes)
-#   section <- new("AssessmentSection", identifier = "bayes",
-#                  assessment_item = exercises, selection = 1)
-#   test <- new("AssessmentTest", section = list(section))
-#   test
-# }
+bayes_stud <- function(seeds = 1:20) {
+  ex <- lapply(seeds, bayes)
+  s <- section(ex, selection = 1)
+  test(s, identifier = "bayes_stud")
+}
