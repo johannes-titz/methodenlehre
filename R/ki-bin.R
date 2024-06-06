@@ -10,7 +10,13 @@
 #'
 #' @return: Entry rqti object
 #' @export
-ki_bin <- function(seed) {
+ki_bin <- function(seed = sample.int(1e4, 1)) {
+  ex <- lapply(seed, ki_bin_one)
+  if (length(ex) == 1) ex <- ex[[1]]
+  ex
+}
+
+ki_bin_one <- function(seed = sample.int(1e4, 1)) {
   set.seed(seed)
   data_orig <- get_data("ki_bin_data")
   data_orig <- data_orig %>%
