@@ -310,3 +310,9 @@ screenshot_chromote <- function(url, height = 1080) {
   b$Page$loadEventFired()
   b$screenshot(selector = "#main-content", scale = 1.5)
 }
+
+html_to_xml <- function(input) {
+  i2 <- gsub("&lt;", "&#60;", input)
+  output <- gsub("&gt;", "&#62;", i2)
+  textutils::HTMLdecode(output, T, F, F)
+}
