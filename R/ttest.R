@@ -122,6 +122,20 @@ ttest_one <- function(seed = sample.int(1e4, 1)) {
       content = unlist(content), feedback = list(fb))
 }
 
+ttest <- function(seeds = sample.int(1e4, 1)) {
+  ex <-  lapply(seeds, ttest_one)
+  if (length(ex) == 1) ex <- ex[[1]]
+  ex
+}
+
+ttest_stud <- function(seeds = 1:20) {
+  ex <- ttest(seeds)
+  s <- section(ex, selection = 1)
+  test4opal(s, identifier = "ttest_stud",
+            files = get_supplement_paths(),
+            calculator = "scientific")
+}
+
 ttest_story <- function(item_name, item_content, hypothesis, labels, n,
                         countries, ttest_output) {
   glue::glue("
