@@ -11,6 +11,8 @@ lagemaße_klausur(
 }
 \arguments{
 \item{seeds}{seeds for exercises}
+
+\item{question}{selection from \code{lagemaße_question()}}
 }
 \value{
 list of Entry rqti objects

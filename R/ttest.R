@@ -59,7 +59,7 @@ ttest_d <- function(ttest_data) {
   q <- "Wie groß ist die Effektgröße d?"
   fb <- glue::glue("Die Effektgröße für unabhängige Stichproben kann man direkt aus dem t-Wert approximieren: {mml_d$mml}. Eine Stichprobengröße steht schon da, die andere lässt sich aus den Freiheitsgraden berechnen (siehe Frage 3). Bitte beachten Sie, dass diese Effektgröße nur eine Approximation ist. Um den exakten Wert auszurechnen, brauchen Sie die Rohdaten.")
   list(q = list("<p>", q, numericGap(solution, "d", tolerance = 1,
-                                    tolerance_type = "relative"), "</p>"),
+                                     tolerance_type = "relative"), "</p>"),
        fb = hug_fb(fb, q), solution = solution)
 }
 
