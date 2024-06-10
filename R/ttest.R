@@ -22,7 +22,8 @@ ttest_data <- function() {
   df <- nrow(data) - 2
   critical_t <- lapply(actual_alphas, function(alpha) mml_eq(qt(alpha, df), T))
   critical_t <- plyr::ldply(critical_t, data.frame)
-  df_results <- data.frame(hypothesis = names(hypothesis), mml = hypothesis,
+  df_results <- data.frame(hypothesis = names(hypothesis),
+                           mml = hypothesis,
                            alpha = actual_alphas,
                            critical_t = round(critical_t$res, 3),
                            mml_t = critical_t$mml)
@@ -112,7 +113,7 @@ ttest_one <- function(seed = sample.int(1e4, 1)) {
   q4 <- ttest_krit(ttest_data)
   q <- list(q1, q2, q3, q4)
   questions <- sapply(q, function(x) x$q)
-  feedback <- unlist(lapply(q, function(x) textutils::HTMLdecode(x$fb)))
+  feedback <- unlist(lapply(q, function(x) textutils::HTMLdecode(x$fb, T, F, F)))
 
   content <- list(ttest_story)
   content <- append(content, questions)
