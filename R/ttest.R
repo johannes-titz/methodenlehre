@@ -122,6 +122,13 @@ ttest_one <- function(seed = sample.int(1e4, 1)) {
       content = unlist(content), feedback = list(fb))
 }
 
+#' Exercise ttest
+#'
+#' An independent t-test result based on real data is presesented. 4 questions
+#' have to be answered.
+#'
+#' @param seeds Seeds for exercises, can be a single value or a vector
+#' @export
 ttest <- function(seeds = sample.int(1e4, 1)) {
   ex <-  lapply(seeds, ttest_one)
   if (length(ex) == 1) ex <- ex[[1]]
