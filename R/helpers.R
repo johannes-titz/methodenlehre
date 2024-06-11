@@ -316,3 +316,12 @@ html_to_xml <- function(input) {
   output <- gsub("&gt;", "&#62;", i2)
   textutils::HTMLdecode(output, T, F, F)
 }
+
+imgfile2tag <- function(imgfile, width = 650) {
+  # Convert the graphic image to a base 64 encoded string.
+  txt <- RCurl::base64Encode(readBin(imgfile, "raw",
+                                     file.info(imgfile)[1, "size"]),
+                             "txt")
+  image <- as.character(htmltools::HTML(paste0('<img width="', width, '" ', 'src="data:image/png;base64,', txt, '"/>')))
+  image
+}
