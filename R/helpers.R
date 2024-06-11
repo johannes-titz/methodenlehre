@@ -261,9 +261,10 @@ prepare_items <- function(d, percent_complete = 0.5) {
 #' candidate (score_candidate"). See `prepare_items`.
 #'
 #' @return tibble with id_answer, r_it, P, and n (number of answers)
-analysis_items_default <- function(d, groups = c("id_answer")) {
+analysis_items_default <- function(d, groups = c("id_answer"),
+                                   percent_complete = 0.5) {
   qs <- d %>%
-    prepare_items() %>%
+    prepare_items(percent_complete = percent_complete) %>%
     group_by_at(groups) %>%
     summarize(r_it = mycor(score_candidate, score - score_candidate),
               P = mean(score_candidate) / mean(score_max),
