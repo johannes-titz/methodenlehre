@@ -21,7 +21,7 @@ power_data <- function() {
 
   x <- seq(-10, 10, 0.001)
   density_null <- dt(x, df)
-  df_null <- data.frame(x = x, y = density_null, hypothesis = "null") 
+  df_null <- data.frame(x = x, y = density_null, hypothesis = "null")
   density_alternative <- dt(x, df, ncp = t)
   df_alternative <- data.frame(x = x, y = density_alternative, hypothesis = "alternative")
 
@@ -39,37 +39,37 @@ power_data <- function() {
 #' @import ggplot2
 power_plot <- function(d, criterion, alpha, beta) {
   p <- ggplot(d, aes(x, y, fill = region)) +
-    geom_line() + 
+    geom_line() +
     geom_vline(xintercept = criterion, linetype = "dotted") +
-    geom_hline(yintercept = 0, linetype = "dashed") + 
-    theme_classic(base_size = 14) + 
-  #  annotate(geom = "text", x=c(0, t), y = -0.01, label = c(0, t)) + 
-    #theme(legend.position = "none") + 
-    annotate(geom = "text", x = criterion*1, y = max(d$y)*1.07, 
-             label = "Kriterium", family = "Noto Sans") + 
-    scale_x_continuous("t") + 
+    geom_hline(yintercept = 0, linetype = "dashed") +
+    theme_classic(base_size = 14) +
+  #  annotate(geom = "text", x=c(0, t), y = -0.01, label = c(0, t)) +
+    #theme(legend.position = "none") +
+    annotate(geom = "text", x = criterion*1, y = max(d$y)*1.07,
+             label = "Kriterium", family = "Noto Sans") +
+    scale_x_continuous("t") +
     scale_y_continuous("Dichte") +
     theme(legend.position = c(0.12, 0.9))#,
           #legend.title = element_text(size = 12),
           #legend.text = element_text(size = 12, family = "Noto Sans"))
           #text = element_text(size = 12, family = "Latin Modern Roman"))
-    
+
     # a bit tricky because there are 4 cases
     #scale_fill_manual(values=c("#d8b365", "#5ab4ac", "#d8b365", "#5ab4ac"))
 
   col1 <- "#FFEDA0" # "#d8b365"
   col2 <- "#FEB24C" # "#5ab4ac"
 
-  p1 <- p  + 
-    geom_ribbon(aes(ymin=0, ymax=y*case), alpha = 0.9) + 
+  p1 <- p  +
+    geom_ribbon(aes(ymin=0, ymax=y*case), alpha = 0.9) +
   #  annotate(geom = "text", x=criterion*c(0.8, 1.2), y = 0.01, label = c(beta, alpha)) +
     scale_fill_manual("Anteil Fläche", breaks = c("alternativeBelow_criterion", "nullAbove_criterion"),
                       values = rep(c(col1, col2), 2), #c("#d8b365", "#5ab4ac", "#d8b365", "#5ab4ac"),
     labels = as.character(c(beta, alpha)))
 
-  p2 <- p + 
-    geom_ribbon(aes(ymin=0, ymax=y*!case), alpha = 0.7) + 
-  #  annotate(geom = "text", x=criterion*c(0.8, 1.2), y = 0.01, label = c(1-alpha, 1-beta)) + 
+  p2 <- p +
+    geom_ribbon(aes(ymin=0, ymax=y*!case), alpha = 0.7) +
+  #  annotate(geom = "text", x=criterion*c(0.8, 1.2), y = 0.01, label = c(1-alpha, 1-beta)) +
     scale_fill_manual(name = "Anteil Fläche", breaks = c("alternativeAbove_criterion", "nullBelow_criterion"),
                       values = rep(c(col1, col2), 2), # c("#d8b365", "#5ab4ac", "#d8b365", "#5ab4ac"),
     labels = c(as.character(c(1-beta, 1-alpha))))
@@ -141,10 +141,17 @@ Fragen 5 und 6 lassen sich über die Formelsammlung lösen:
 #' Exercise power
 #'
 #' Visual exercise for significance test.
-#' 
+#'
 #' @return Entry object
 #' @export
-power <- function() {
+power <- function(seeds = sample.int(1e4, 1)) {
+  ex <- lapply(seeds, power_one)
+  if (length(ex) == 1) ex <- ex[[1]]
+  ex
+}
+
+power_one <- function(seed = sample.int(1e4, 1)) {
+  set.seed(seed)
   d <- power_data()
   plot_string <- power_plot(d$d, d$criterion, d$alpha, d$beta)
   story <- (power_story(d$t, d$df))
@@ -152,5 +159,13 @@ power <- function() {
   q_list <- power_qdf(d$alpha, d$beta, d$mml_d$res, d$mml_n$res)
   content <- list(story, plot_string)
   content <- append(content, q_list, 3)
-  entry <- new("Entry", identifier = "power", content = content)
+  entry <- new("Entry", identifier = paste0("power", seed), content = content)
+}
+
+power_stud <- function(seeds = 1:20) {
+  ex <- power(seeds)
+  s <- section(ex, selection = 1)
+  test4opal(s, identifier = "power_stud",
+            files = get_supplement_paths(),
+            calculator = "scientific")
 }
