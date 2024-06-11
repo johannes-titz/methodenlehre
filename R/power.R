@@ -78,8 +78,10 @@ power_plot <- function(d, criterion, alpha, beta) {
   final_plot <- sample(list(p1, p2), 1)[[1]]
   #print(final_plot)
   #s()
-  ggsave("power.png", final_plot, width = 10*0.7, height = 8*0.7, dpi = "print", device=ragg::agg_png)
-  paste("<img width='650' src='", base64enc::dataURI(file = "power.png", mime = "image/png"), "'/>'")
+  tf1 <- tempfile(fileext = ".png")
+  ggsave(tf1, final_plot, width = 10*0.7, height = 8*0.7, dpi = "print",
+         device=ragg::agg_png)
+  imgfile2tag(tf1)
 }
 
 power_story <- function(t, df) {
@@ -145,7 +147,7 @@ Fragen 5 und 6 lassen sich über die Formelsammlung lösen:
 #' @return Entry object
 #' @export
 power <- function(seeds = sample.int(1e4, 1)) {
-  ex <- lapply(seeds, power_one)
+  ex <- parallel::mclapply(seeds, power_one)
   if (length(ex) == 1) ex <- ex[[1]]
   ex
 }
