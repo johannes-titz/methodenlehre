@@ -90,9 +90,10 @@ ttest_n <- function(ttest_data) {
   n <- ttest_data$n
   df <- ttest_data$df
   mml_n <- mml_eq(n[2L] <- df + 2L - n[1L], T)
+  mml_N <- mml_eq(N <- sum(n), T)
   q <- "Wie groß ist die Gesamtstichprobe?"
-  fb <- glue::glue("Die Gesamtstichprobe kann aus den Freiheitsgraden berechnet werden. Für unabhängige Stichproben gilt bei Varianzhomogenität: {mml_n$mml}.")
-  solution <- mml_n$res
+  fb <- glue::glue("Eine Stichprobengröße ist gegeben, die andere lässt sich über die Freiheitsgrade berechnen. Für unabhängige Stichproben gilt bei Varianzhomogenität: {mml_n$mml}. Wir addieren die Stichproben und kommen auf {mml_N$mml}")
+  solution <- mml_N$res
   list(q = list("<p>", q, numericGap(solution, "n"), "</p>"),
        fb = hug_fb(fb, q),
        solution = solution)
