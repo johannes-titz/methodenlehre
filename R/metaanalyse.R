@@ -2,14 +2,8 @@
 #
 #- select randomly effect size from sedlmeier study, rs and Ns vary
 #- make a test with a random seed, upload to opal, let hiwi check if everything is correct, save test somehow
-#- formelsammlung checken, alles da?
 #- split up the sections, random part should be separated for easier testing
 #- maybe add more calculation examples?
-
-ma_gap <- function(solution) {
-    gap_numeric(solution, tolerance = 1, tolerance_type = "relative",
-                expected_length = 2)
-}
 
 ma_n <- function() {
   round(rnorm(1, 150, 25))
@@ -27,7 +21,7 @@ study_d <- function() {
   d <- study_d$stat
   n <- study_d$n
   mml <- mml_eq(r <- dfrac(d, sqrt(d^2L + 4L)), return_result = T)
-  study_d$question <- glue::glue("Studie mit {mml_eq(d)} und {mml_eq(n)}, sodass {mathml('r==')}")
+  study_d$question <- glue::glue("Studie mit {mml_eq(d)} und {mml_eq(n)}")
   study_d$fb <- mml$mml
   study_d$solution <- mml$res
   study_d$title <- "Effektgröße d"
@@ -69,18 +63,27 @@ study_t <- function() {
 }
 
 study_eta2 <- function() {
+  df <- vector()
+  df["inn"] <- ma_n()
+  mml_n <- mml_eq(n <- df["inn"] + 2L, T)
   # es form eta^2
   r <- round(random_r(), 2)
   eta <- r
   mml_r <- mml_eq(r <- sqrt(eta^2L), T)
   question <- glue::glue("Studie mit {mml_eq(eta^2L)} und {mml_eq(df)}")
-  study <- tibble::lst(n = ma_n(), fb = mml_r$mml,
+  study <- tibble::lst(n = ma_n(), fb =paste(paste0("<p>", c(mml_r$mml, mml_n$mml), "</p>"), collapse = ""),
                        solution = mml_r$res, question, r)
   study$title <- paste("Effektgröße", mathml(quote(eta^2L)))
   study
 }
 
-metaanalyse <- function() {
+metaanalyse <- function(seeds = sample.int(1e4, 1)){
+  ex <- lapply(seeds, metaanalyse_one)
+  if (length(ex) == 1) ex <- ex[[1]]
+  ex
+}
+
+metaanalyse_one <- function(seed = sample.int(1e4, 1)) {
   l <- tibble::lst(study_eta2(), study_t(), study_F(), study_d())
   lnames <- names(l)
   d <- dplyr::bind_rows(l)
@@ -97,65 +100,29 @@ metaanalyse <- function() {
   mean_effect <- round(weighted.mean(rs, Ns), 2)
   questions <- unlist(df2gap(d), use.names = F)
   story <- ma_story(sedlmeier, sedlmeier_n)
-  final_question <- list("Berechnen Sie nun die an der Stichprobe gewichtete mittlere Effektgröße, inklusive der Original-Studie von Sedlmeier et al. (2012).", ma_gap(mean_effect))
+  final_question <- list("Berechnen Sie nun die an der Stichprobe gewichtete mittlere Effektgröße, inklusive der Original-Studie von Sedlmeier et al. (2012).",
+                         gapNumeric(mean_effect, "m_es", tolerance = 1, tolerance_type = "relative"))
   final_fb <- ma_fb_final(rs, Ns)
 
-  fb <- paste0("<details><summary>", c(d$title, "mittlere, gewichtete ES"), "</summary>", c(d$fb, final_fb),
+  fb <- paste0("<details><summary>", c(d$title, "mittlere, gewichtete Effektgröße"), "</summary>", c(d$fb, final_fb),
   "</details>")
-  content <- list(story, final_question)
   content <- append(questions, story, 1)
-  new("Entry", identifier = "metaanalyse", content = content,
+  content <- append(content, final_question)
+  new("Entry", identifier = paste0("metaanalyse", seed), content = content,
       feedback = list(new("ModalFeedback", content = list(fb))))
 }
 
-ma_story <- function(r, n) {
-  glue::glue("Sie lesen die Meta-Analyse von Sedlmeier et. al (2012) zur Wirkung von Meditation. Im Ergebnisteil wird ein Durchschnittseffekt von {mml_eq(r)} für die abhängige Variable Stressempfinden ({mml_eq(n)} berichtet. Sie kennen einige neuere Studien zur Wirkung von Meditation auf Stressempfinden und wollen einen aktualisierten Durchschnittseffekt berechnen. Da Sie keine Rohdaten haben, müssen Sie die Effektgrößen aus den berichteten Statistiken der Studien ausrechnen.
-
-Folgende Statistiken stehen für die zusätzlichen Studien zur Verfügung. Gehen Sie davon aus, dass stets die Kontrollgruppe mit der Experimentalgruppe verglichen wurde. Berechnen Sie zunächst die Effektgröße {mathml('r')} für diese Studien. Runden Sie auf 2 Dezimalstellen!")
+metaanalyse_stud <- function(seeds = 1:20) {
+  ex <- metaanalyse(seeds)
+  s <- section(ex, selection = 1)
+  test_mg(s, "metaanalyse_stud")
 }
 
+ma_story <- function(r, n) {
+  glue::glue("<p>Sie lesen die Meta-Analyse von Sedlmeier et. al (2012) zur Wirkung von Meditation. Im Ergebnisteil wird ein Durchschnittseffekt von {mml_eq(r)} für die abhängige Variable Stressempfinden ({mml_eq(n)} berichtet. Sie kennen einige neuere Studien zur Wirkung von Meditation auf Stressempfinden und wollen einen aktualisierten Durchschnittseffekt berechnen. Da Sie keine Rohdaten haben, müssen Sie die Effektgrößen aus den berichteten Statistiken der Studien ausrechnen.</p><p>
 
-#
-#Mittlere gewichtete Effektgröße: `r gap_helper(mean_effect) `
-#
-## feedback
-#
-#
-#<!-- <details > -->
-#<!--   <summary>Statistik $\eta^2$</summary> -->
-#<!--   $\eta^2$ ist wie $r^2$ zu behandeln, man zieht also einfach die Wurzel und bekommt:  -->
-#
-#<!--   $$r=\sqrt{\eta^2} = \sqrt{  `r study_eta2$stat`  } = `r study_eta2$r`$$ -->
-#<!-- </details> -->
-#
-#<details >
-# <summary>Statistik $t$</summary>
-# In der Formelsammlung ist die Umrechnung angegeben:
-#
-# $$r = \sqrt{\frac{t^2}{t^2+\mathrm{df}}} = \sqrt{\frac{  `r study_t$stat`  ^2}{`r study_t$stat`^2+\mathrm{`r study_t$df`}}} = `r study_t$r`$$
-#
-# </details>
-#
-#<details >
-# <summary>Statistik $F$</summary>
-#
-# Bei 1 Freiheitsgrad (between), ist der $F$-Wert einfach nur $t^2$sodass ähnlich zum $t$-Beispiel gilt:
-#
-# $$r = \sqrt{\frac{F}{F+\mathrm{df_\mathrm{inn}}}} = \sqrt{\frac{ `r study_F$stat` }{`r study_F$stat` + `r study_F$df`}} = `r study_F$r`$$
-#
-#</details>
-#
-#
-#
-#```{r, include=F}
-#rs_string <- paste(rs, collapse = "+")
-#Ns_string <- paste(Ns, collapse = "+")
-#rsNs_string <- paste(paste(rs, Ns, sep = r"(\cdot)"),
-#                     collapse = "+")
-#```
-#
-#<details>
-# <summary>Mittlere Effektgröße</summary>
+Folgende Statistiken stehen für die zusätzlichen Studien zur Verfügung. Gehen Sie davon aus, dass stets die Kontrollgruppe mit der Experimentalgruppe verglichen wurde. Berechnen Sie zunächst die Effektgröße {mathml('r')} für diese Studien. Runden Sie auf 2 Dezimalstellen!</p>")
+}
 
 ma_fb_final <- function(r, n) {
   i <- 1:length(r)
@@ -166,9 +133,3 @@ ma_fb_final <- function(r, n) {
 Nicht zu vergessen ist natürlich der Originaleffekt, der durch das große {mathml('N')} den neuen Gesamteffekt immer noch dominieren wird.</p>
 {mml$mml}")
 }
-
-#$$\bar{r} = \frac{ \sum_{i=1}^n r_i N_i }{\sum_{i=1}^n N_i }$$
-#
-# $$= \frac{`r rsNs_string` }{`r Ns_string` } = `r mean_effect` $$
-#</details>
-#
