@@ -70,13 +70,21 @@ study_eta2 <- function() {
   r <- round(random_r(), 2)
   eta <- r
   mml_r <- mml_eq(r <- sqrt(eta^2L), T)
-  question <- glue::glue("Studie mit {mml_eq(eta^2L)} und {mml_eq(df)}")
+  question <- glue::glue("Studie mit {mml_eq(eta^2L)} und {mml_eq(df['inn'])}")
   study <- tibble::lst(n = ma_n(), fb =paste(paste0("<p>", c(mml_r$mml, mml_n$mml), "</p>"), collapse = ""),
                        solution = mml_r$res, question, r)
   study$title <- paste("Effektgröße", mathml(quote(eta^2L)))
   study
 }
 
+#' Exercise metaanalyse
+#'
+#' 5 Questions, 4 require to transform an ES to r. 5th requires to calculate
+#' average weighted ES.
+#'
+#' @param seeds seeds for exercises, can be a single value or a vector for
+#'   several versions
+#' @export
 metaanalyse <- function(seeds = sample.int(1e4, 1)){
   ex <- lapply(seeds, metaanalyse_one)
   if (length(ex) == 1) ex <- ex[[1]]
@@ -84,7 +92,7 @@ metaanalyse <- function(seeds = sample.int(1e4, 1)){
 }
 
 metaanalyse_one <- function(seed = sample.int(1e4, 1)) {
-  l <- tibble::lst(study_eta2(), study_t(), study_F(), study_d())
+  l <- tibble::lst(eta2 = study_eta2(), t = study_t(), F = study_F(), d = study_d())
   lnames <- names(l)
   d <- dplyr::bind_rows(l)
 
