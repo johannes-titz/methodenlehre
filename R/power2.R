@@ -2,8 +2,8 @@
 #'
 #' identify the impact on specific parameters when one of them is altered.
 #'
-#' @param case which case to construct, see get_data(power2_data), column id, default
-#'   is one random case
+#' @param case which case to construct, see get_data(power2_data), column id,
+#'   default is one random case
 #'
 #' @return OneInRowTable
 #'
@@ -18,7 +18,7 @@ power2 <- function(case = sample(power2_cases(), 1)) {
   intro <- c(intro, paste0("<p>Was passiert wenn man <b>", selection$story[1],
                            "</b>?</p>"))
   selection <- na.omit(selection)
-  df2sctable(selection, "power2", shuffle = F, story = intro,
+  df2sctable(selection, paste0("power2", case), shuffle = F, story = intro,
              feedback = d$feedback[1])
 }
 
@@ -29,4 +29,10 @@ power2 <- function(case = sample(power2_cases(), 1)) {
 #' @export
 power2_cases <- function() {
   unique(get_data(power2_data)$id)
+}
+
+power2_stud <- function() {
+  ex <- lapply(power2_cases(), power2)
+  s <- section(ex, selection = 1)
+  test_mg(s, "power2_stud")
 }
