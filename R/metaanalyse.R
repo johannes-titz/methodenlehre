@@ -127,7 +127,7 @@ metaanalyse_stud <- function(seeds = 1:20) {
 }
 
 ma_story <- function(r, n) {
-  glue::glue("<p>Sie lesen die Meta-Analyse von Sedlmeier et. al (2012) zur Wirkung von Meditation. Im Ergebnisteil wird ein Durchschnittseffekt von {mml_eq(r)} für die abhängige Variable Stressempfinden ({mml_eq(n)} berichtet. Sie kennen einige neuere Studien zur Wirkung von Meditation auf Stressempfinden und wollen einen aktualisierten Durchschnittseffekt berechnen. Da Sie keine Rohdaten haben, müssen Sie die Effektgrößen aus den berichteten Statistiken der Studien ausrechnen.</p><p>
+  glue::glue("<p>Sie lesen die Meta-Analyse von Sedlmeier et. al (2012) zur Wirkung von Meditation. Im Ergebnisteil wird ein Durchschnittseffekt von {mml_eq(r)} für die abhängige Variable Stressempfinden ({mml_eq(n)}) berichtet. Sie kennen einige neuere Studien zur Wirkung von Meditation auf Stressempfinden und wollen einen aktualisierten Durchschnittseffekt berechnen. Da Sie keine Rohdaten haben, müssen Sie die Effektgrößen aus den berichteten Statistiken der Studien ausrechnen.</p><p>
 
 Folgende Statistiken stehen für die zusätzlichen Studien zur Verfügung. Gehen Sie davon aus, dass stets die Kontrollgruppe mit der Experimentalgruppe verglichen wurde. Berechnen Sie zunächst die Effektgröße {mathml('r')} für diese Studien. Runden Sie auf 2 Dezimalstellen!</p>")
 }
