@@ -7,8 +7,8 @@
 power2(case = sample(power2_cases(), 1))
 }
 \arguments{
-\item{case}{which case to construct, see get_data(power2_data), column id, default
-is one random case}
+\item{case}{which case to construct, see get_data(power2_data), column id,
+default is one random case}
 }
 \value{
 OneInRowTable

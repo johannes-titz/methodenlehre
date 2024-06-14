@@ -5,7 +5,7 @@
 \title{d has to be prepared accordingly so that it contains the overall score of the
 candidate (score_candidate"). See \code{prepare_items}.}
 \usage{
-analysis_items_default(d, groups = c("id_answer"))
+analysis_items_default(d, groups = c("id_answer"), percent_complete = 0.5)
 }
 \value{
 tibble with id_answer, r_it, P, and n (number of answers)

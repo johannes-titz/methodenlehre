@@ -4,7 +4,7 @@
 \alias{power}
 \title{Exercise power}
 \usage{
-power()
+power(seeds = sample.int(10000, 1))
 }
 \value{
 Entry object
