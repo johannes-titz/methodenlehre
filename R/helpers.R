@@ -326,3 +326,9 @@ imgfile2tag <- function(imgfile, width = 650) {
   image <- as.character(htmltools::HTML(paste0('<img width="', width, '" ', 'src="data:image/png;base64,', txt, '"/>')))
   image
 }
+
+test_mg <- function(section, identifier){
+  test4opal(section, identifier,
+            files = get_supplement_paths(),
+            calculator = "scientific")
+}
