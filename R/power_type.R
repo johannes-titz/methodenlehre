@@ -1,6 +1,15 @@
-power_type <- function(seed = sample.int(1e4, 1)) {
+#' Exercise power type
+#'
+#' Different types of power analyses are described and the participant has to decide which parameters must be specified.
+#'
+#' @param seed seed for exercise, defaults to a randomly drawn 4-digits seed
+#' @param type Which type of power analysis should be selected, default is all
+#' @export
+power_type <- function(seed = sample.int(1e4, 1),
+                       type = c("a-priori", "post-hoc", "Kompromiss")) {
   set.seed(seed)
   data <- get_data("power_type_data")
+  data <- data[data$question %in% type,]
   data <- data %>%
     dplyr::mutate(question = glue::glue("Für Ihre Studie im EmpEx möchten Sie folgenden statistischen Test durchführen: <b>{test}</b>. Welche Größen müssen in diesem Fall (unter anderem) für eine <b>{question}</b>-Power-Analyse festgelegt werden? Wählen Sie alle notwendigen Größen aus. Für jede Teil-Frage bekommen Sie bei korrekter Antwort 0.25 Punkte, bei falscher Antwort -0.25 Punkte, jedoch nie weniger als 0 Punkte insgesamt."))
   row <- data %>%
@@ -18,6 +27,7 @@ power_type <- function(seed = sample.int(1e4, 1)) {
     dplyr::select(rows:rows_id) %>%
     dplyr::group_by(cols) %>%
     dplyr::sample_n(2)
+
   feedback3 <- "Beachten Sie, dass die Aufgabe zufällig erstellt wird. Das Feedback enthält somit auch Erklärungen für nicht gezeigte Auswahloptionen."
   fb <- new("ModalFeedback",
             content = list("<p>", row$feedback1, row$feedback2, feedback3,
