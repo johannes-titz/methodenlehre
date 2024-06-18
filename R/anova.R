@@ -217,12 +217,19 @@ anova_questions <- function(tbl, qs_ges) {
 #' A realistic within ANOVA output is presented based on a real study. 8
 #' questions have to be answered. This is the raw version, producing an rqti
 #' Entry object.
-#' @param seed Seed for the exercise. Default is a random seed drawn from 1:1e5.
+#' @param seeds Seeds for the exercises, can be a single value or a vector for
+#'   multiple exercises. Defaults to random seed.
 #' @return rqti Entry object
 #' @examples
 #' a <- anova()
 #' @export
-anova <- function(seed = sample.int(1e5, 1)) {
+anova <- function(seeds = sample.int(1e4, 1)) {
+  ex <- lapply(seeds, anova_one)
+  if (length(ex) == 1) ex <- ex[[1]]
+  ex
+}
+
+anova_one <- function(seed = sample.int(1e5, 1)) {
   a <- anova_example(seed)
   q <- anova_questions(a$mdl$tbl, a$qs_ges)
   questions <- sapply(q, function(x) x$q)
