@@ -1,4 +1,18 @@
-regression_multiple <- function(seed) {
+#' Exercise regression_multiple
+#'
+#' Multiple regression setting with prestige data. 3 questions: what is the best
+#' predictor? What is the standardized regression coefficient? Estimate of dv
+#' for specific values of iv
+#' @param seeds seeds for exercises, can be a single value or a vector for
+#'   several exercises, defaults to randomly drawn 4-digits seeds.
+#' @export
+regression_multiple <- function(seeds = sample.int(1e4, 1)) {
+  ex <- lapply(seeds, regression_multiple_one)
+  if (length(ex) == 1) ex <- ex[[1]]
+  ex
+}
+
+regression_multiple_one <- function(seed = sample.int(1e4, 1)) {
   set.seed(seed)
   prestige <- prepare_prestige(2)
   vars <- names(prestige$data)
