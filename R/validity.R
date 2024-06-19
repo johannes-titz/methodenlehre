@@ -73,13 +73,16 @@ validity_stud <- function(which_study = "haengebruecke", selection = 2) {
   test
 }
 
-validity_klausur <- function(which_study = c("hängebrücke", "anker"),
-                             which_scenario = sample(1:16, 1)) {
+#' Exercise validity
+#'
+#' Currently only the Dutton & Aron 1974 study is included with different
+#' scenarios. 3 questions regarding validity and design must be answered.
+#'
+#' @export
+validity <- function() {
+  scenario_sel <- sample(unique(d$scenario), 1)
   d <- get_data("validity_data")
   d <- d %>%
-    filter(study %in% which_study,
-           scenario == which_scenario)
-  d_studies <- split(d, d$scenario)
-  sections <- lapply(d_studies, section_helper)
-  sections
+    filter(scenario == scenario_sel)
+  question_helper(d)
 }
