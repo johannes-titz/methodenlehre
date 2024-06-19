@@ -78,11 +78,17 @@ validity_stud <- function(which_study = "haengebruecke", selection = 2) {
 #' Currently only the Dutton & Aron 1974 study is included with different
 #' scenarios. 3 questions regarding validity and design must be answered.
 #'
+#' @param scenario The scenario to choose from, see `validity_scenarios` for
+#'   options
 #' @export
-validity <- function() {
-  scenario_sel <- sample(unique(d$scenario), 1)
+validity <- function(scenario = sample(validity_scenarios(), 1)) {
   d <- get_data("validity_data")
-  d <- d %>%
-    filter(scenario == scenario_sel)
+  d <- d[d$scenario == scenario, ]
   question_helper(d)
+}
+
+#' @export
+validity_scenarios <- function() {
+  d <- get_data("validity_data")
+  unique(d$scenario)
 }
