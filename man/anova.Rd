@@ -4,10 +4,11 @@
 \alias{anova}
 \title{anova exercise}
 \usage{
-anova(seed = sample.int(1e+05, 1))
+anova(seeds = sample.int(10000, 1))
 }
 \arguments{
-\item{seed}{Seed for the exercise. Default is a random seed drawn from 1:1e5.}
+\item{seeds}{Seeds for the exercises, can be a single value or a vector for
+multiple exercises. Defaults to random seed.}
 }
 \value{
 rqti Entry object
