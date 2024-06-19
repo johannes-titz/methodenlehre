@@ -39,7 +39,7 @@ question_helper <- function(tbl) {
   entry_dropdown <- new(
     "Entry",
     content = c(as.character(htmltools::p(tbl$story[1])), "<p>", q_objs, "</p>"),
-    identifier = paste0("validity_", tbl$study[1], tbl$scenario[1]),
+    identifier = paste0("validity_", tbl$study[1], "_", tbl$scenario[1]),
     feedback = list(feedback)
   )
 }
