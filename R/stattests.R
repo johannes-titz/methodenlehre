@@ -4,16 +4,24 @@
 #' The exercise consists of selecting the appropriate test for a study. There
 #' are 14 variants and 12 different tests.
 #'
-#' @param n_questions number of questions to create
+#' @param id id for setting, see `stattest_ids()`
 #' @return list of exercises
 #' @export
-stattest <- function(n_questions = 1) {
+stattest <- function(id = sample(stattest_ids(), 1)) {
   d <- get_data(stattests)
-  rows <- d[sample(nrow(d), n_questions), ]
+  rows <- d[d$id %in% id, ]
   l <- split(rows, seq(nrow(rows)))
   ex <- lapply(l, stattest_one, choices = unique(d$solution))
   if (length(ex) == 1) ex <- ex[[1]]
   ex
+}
+
+#' Get ids for stattest exercise
+#'
+#' @export
+stattest_ids <- function() {
+  d <- get_data(stattests)
+  d$id
 }
 
 stattest_stud <- function(n_questions = 2) {

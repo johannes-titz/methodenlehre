@@ -4,10 +4,10 @@
 \alias{stattest}
 \title{stattests exercise}
 \usage{
-stattest(n_questions = 1)
+stattest(id = sample(stattest_ids(), 1))
 }
 \arguments{
-\item{n_questions}{number of questions to create}
+\item{id}{id for setting, see \code{stattest_ids()}}
 }
 \value{
 list of exercises
