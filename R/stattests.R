@@ -6,6 +6,7 @@
 #'
 #' @param n_questions number of questions to create
 #' @return list of exercises
+#' @export
 stattest <- function(n_questions = 1) {
   d <- get_data(stattests)
   rows <- d[sample(nrow(d), n_questions), ]

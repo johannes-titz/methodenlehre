@@ -13,5 +13,6 @@ stattest(n_questions = 1)
 list of exercises
 }
 \description{
-The exercise consists of selecting the appropriate test for a study. There are 14 variants and 12 different tests.
+The exercise consists of selecting the appropriate test for a study. There
+are 14 variants and 12 different tests.
 }
