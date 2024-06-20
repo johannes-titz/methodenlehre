@@ -1,7 +1,9 @@
 #' stattests exercise
 #'
 #'
-#' The exercise consists of selecting the appropriate test for a study. There are 14 variants and 12 different tests.
+#' The exercise consists of selecting the appropriate test for a study. There
+#' are 14 variants and 12 different tests.
+#'
 #' @param n_questions number of questions to create
 #' @return list of exercises
 stattest <- function(n_questions = 1) {
@@ -9,6 +11,7 @@ stattest <- function(n_questions = 1) {
   rows <- d[sample(nrow(d), n_questions), ]
   l <- split(rows, seq(nrow(rows)))
   ex <- lapply(l, stattest_one, choices = unique(d$solution))
+  if (length(ex) == 1) ex <- ex[[1]]
   ex
 }
 
