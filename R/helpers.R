@@ -279,7 +279,7 @@ analysis_items_default <- function(d, groups = c("id_answer"),
 prepare_data_exercises <- function(d) {
   sk2 <- d %>%
     group_by(file) %>%
-    mutate(score = sum(score_candidate),
+    mutate(sum_score = sum(score_candidate),
            sum_answer_given = sum(is_answer_given),
            n = n()) %>%
     filter(sum_answer_given == max(n)) # only fully answered
