@@ -75,7 +75,19 @@ fa_table2 <- function(myfa) {
   tbl
 }
 
-faktorenanalyse <- function(seed = sample.int(1e5, 1)) {
+#' Exercise faktorenanalyse
+#'
+#' Bootstrapped factor analysis based on Thurstone 1941 intelligence data. 4
+#' questions: number of factors for Kaiser criterion and parallel analysis,
+#' calculate communality, calculate variance explained.
+#'
+faktorenanalyse <- function(seeds = sample.int(1e4, 1)) {
+  ex <- lapply(seeds, faktorenanalyse_one)
+  if (length(ex) == 1) ex <- ex[[1]]
+  ex
+}
+
+faktorenanalyse_one <- function(seed = sample.int(1e5, 1)) {
   set.seed(seed)
   fa <- fa_example()
   eigenvalues <- fa$fa$vars_accounted_rot[1,]
@@ -135,7 +147,7 @@ fa_feedback <- function(h2_item, h2, n_factors_model, n_items, eigenvalue) {
 }
 
 faktorenanalyse_stud <- function(seeds = 1:20) {
-  exercises <- parallel::mclapply(seeds, faktorenanalyse)
+  exercises <- parallel::mclapply(seeds, faktorenanalyse_one)
   section <- new("AssessmentSection", assessment_item = exercises, selection = 1)
   test <- new("AssessmentTestOpal", identifier = "faktorenanalyse",
               section = list(section), calculator = "scientific-calculator",
