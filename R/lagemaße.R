@@ -223,6 +223,7 @@ lagemaße_klausur <- function(
 ) {
   ex <- lapply(seeds, function(x) lagemaße(study = lagemaße_davis(seed = x),
                                            question = question))
+  if (length(ex) == 1) ex <- ex[[1]]
   ex
 }
 
