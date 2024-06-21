@@ -38,6 +38,7 @@ Collate:
     bayes.R
     ca.R
     faktorenanalyse.R
+    forschungsprozess.R
     ki-bin.R
     lagemaße.R
     metaanalyse.R
