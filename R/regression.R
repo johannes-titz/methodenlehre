@@ -358,7 +358,7 @@ regression_one <- function(seed = sample.int(1e6, 1),
 regression <- function(seeds = sample.int(1e6, 1),
                        study = sample(prep_functions(), 1),
                        which_questions = 1:11) {
-  ex <- lapply(seeds, regression_one)
+  ex <- lapply(seeds, regression_one, which_questions = which_questions)
   if (length(ex) == 1) ex <- ex[[1]]
   ex
 }
