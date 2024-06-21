@@ -81,6 +81,8 @@ fa_table2 <- function(myfa) {
 #' questions: number of factors for Kaiser criterion and parallel analysis,
 #' calculate communality, calculate variance explained.
 #'
+#' @seeds seeds for exercise, can be single value or vector
+#' @export
 faktorenanalyse <- function(seeds = sample.int(1e4, 1)) {
   ex <- lapply(seeds, faktorenanalyse_one)
   if (length(ex) == 1) ex <- ex[[1]]
