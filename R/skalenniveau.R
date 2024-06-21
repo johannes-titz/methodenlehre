@@ -22,7 +22,8 @@ skalenniveau <- function(n = 2) {
 #' useful questions from the 56 available. Currently this amount to 12 questions
 #'
 #' @export
-skalenniveau_klausur <- function(n = 2) {
+skalenniveau_klausur <- function(n = 2, seed = sample.int(1e4, 1)) {
+  set.seed(seed)
   sn_data <- get_data("skalenniveau")
   sn_data <- sn_data %>%
       dplyr::filter(r_it >= 0.3, P >= 0.1, P <= 0.9)
