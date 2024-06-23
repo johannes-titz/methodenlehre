@@ -3,7 +3,7 @@
 #' Simple ordering task for the scientific process.
 #' @export
 forschungsprozess <- function() {
-  q <- "In welcher Reihenfolge läuft der wissenschaftliche Prozess ab? Ziehen Sie die Elemente von links nach rechts in die korrekte Position. (1=Anfang, 8=Ende). Sie bekommen nur auf die vollständig korrekte Reihenfolge einen Punkt, Teilordnungen können nicht berücksichtigt werden."
+  q <- "In welcher Reihenfolge läuft der wissenschaftliche Prozess ab? Ziehen Sie die Elemente in die korrekte Position. (1=Anfang, 8=Ende). Sie bekommen nur auf die vollständig korrekte Reihenfolge einen Punkt, Teilordnungen können nicht berücksichtigt werden."
 
   c <- c("Theorie", "Forschungshypothese", "Präzisierung der Hypothese (statistische Hypothese)",
          "Design der Studie", "Durchführung der Studie", "Datenanalyse",
