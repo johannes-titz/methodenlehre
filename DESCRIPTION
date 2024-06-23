@@ -43,10 +43,12 @@ Collate:
     lagemaße.R
     metaanalyse.R
     methodenguru.R
+    methodenlehre.R
     methodenlehre-package.R
     power.R
     power2.R
     power_type.R
+    qualitative.R
     regression.R
     regression_multiple.R
     skalenniveau.R

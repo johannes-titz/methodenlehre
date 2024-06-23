@@ -10,6 +10,8 @@ qualitative_aussagen <- function() {
   list(p1, p2, p3, p4)
 }
 
+#' Exercise qualitative
+#' @export
 qualitative <- function(which_questions = sample(1:4, 1)) {
   qa <- qualitative_aussagen()
   qa2 <- unlist(qa[which_questions])
