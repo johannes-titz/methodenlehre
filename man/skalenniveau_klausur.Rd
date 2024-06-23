@@ -4,7 +4,7 @@
 \alias{skalenniveau_klausur}
 \title{Create question for exercise skalenniveau for exam}
 \usage{
-skalenniveau_klausur(n = 2)
+skalenniveau_klausur(n = 2, seed = sample.int(10000, 1))
 }
 \description{
 Difference to skalenniveau function is that we select only diagnostically
