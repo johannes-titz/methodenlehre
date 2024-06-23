@@ -123,14 +123,14 @@ df2sc2 <- function(d, question, choices = levels(d$cols),
     sc_list
 }
 
-mlehre <- function(which_exam = c("mlehreI", "mlehreII"), sections) {
-    new("AssessmentTestOpal",
-        identifier = paste(which_exam[1], substr(Sys.Date()), 1, 4),
-        section = sections,
-        academic_grading = TRUE,
-        grade_label = "VORLÄUFIGE Note: ",
-        calculator = "scientific-calculator",
-        files = get_supplement_paths())
+mlehre <- function(which_exam, sections) {
+  new("AssessmentTestOpal",
+      identifier = paste0(which_exam, substr(Sys.Date(), 1, 4)),
+      section = sections,
+      academic_grading = TRUE,
+      grade_label = "VORLÄUFIGE Note: ",
+      calculator = "scientific-calculator",
+      files = get_supplement_paths())
 }
 
 mlehreI <- function(sections) {
@@ -332,3 +332,5 @@ test_mg <- function(section, identifier){
             files = get_supplement_paths(),
             calculator = "scientific")
 }
+
+r <- render_qtijs
