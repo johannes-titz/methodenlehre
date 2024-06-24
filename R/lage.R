@@ -1,11 +1,11 @@
-#' Create questions for exercise lagemaße
+#' Create questions for exercise lage
 #'
 #' @param x This is the variable to create questions for.
 #' @return data frame containing all information for questions for qti
 #' @import mathml
 #' @importFrom stats var
 #' @export
-lagemaße_qdf <- function(x) {
+lage_qdf <- function(x) {
     # todo: generate feedback
     x <- sort(x)
     n <- length(x)
@@ -79,7 +79,7 @@ lagemaße_qdf <- function(x) {
     df
 }
 
-#' Create davis data set for lagemaße exercise
+#' Create davis data set for lage exercise
 #'
 #' @details
 #'
@@ -98,7 +98,7 @@ lagemaße_qdf <- function(x) {
 #' @importFrom stats na.omit
 #'
 #' @export
-lagemaße_davis <- function(dv = NULL,
+lage_davis <- function(dv = NULL,
                            n = NULL,
                            seed = sample.int(1e3, 1)) {
     # der erste part ließe sich auslagern in eine funktion vector_davis
@@ -119,7 +119,7 @@ lagemaße_davis <- function(dv = NULL,
     tibble::lst(vector, story, seed, name = "Davis")
 }
 
-#' Create qti item for lagemaße
+#' Create qti item for lage
 #'
 #' @param dv dependent variable, numeric vector
 #' @param story story before questions
@@ -136,7 +136,7 @@ lagemaße_davis <- function(dv = NULL,
 #' @details
 #' Note that identifiers for specific questions are automatically created.
 #'
-lagemaße2 <- function(dv, story,
+lage2 <- function(dv, story,
                       question = c(
                           "Median", "Unteres Quartil", "Oberes Quartil",
                           "Interquartilsabstand", "Mittelwert", "Varianz",
@@ -146,7 +146,7 @@ lagemaße2 <- function(dv, story,
   # seed einbeziehen?
   # questions by question_df berücksichtigen?
   # generate qti questions from dv
-  qdf <- lagemaße_qdf(dv)
+  qdf <- lage_qdf(dv)
   qdf <- qdf %>%
     mutate(id = row.names(qdf)) %>%
     dplyr::filter(question %in% !!question)
@@ -176,59 +176,59 @@ lagemaße2 <- function(dv, story,
 }
 
 #'
-#' question vector that can be used as input for lagemaße functions
-lagemaße_question <- function() {unlist(lagemaße_qdf(1:10)$question)}
+#' question vector that can be used as input for lage functions
+lage_question <- function() {unlist(lage_qdf(1:10)$question)}
 
-#' Exercise lagemaße
+#' Exercise lage
 #'
-#' lagemaße creates a qti Entry exercise for descriptive statistics
+#' lage creates a qti Entry exercise for descriptive statistics
 #' @param seed seed which is passed to study function by default. If you use
 #'   your own study function, this is ignored, unless you pass it directly to
 #'   your function.
 #' @param study list with elements vector, story and seed, by default
-#'   lagemaße_davis() with seed taken from
-#' @param question question data frame, default is lagemaße_question()
+#'   lage_davis() with seed taken from
+#' @param question question data frame, default is lage_question()
 #'
 #' @return Entry object of rqti class
 #'
 #' @details Check out the defaults, which are just functions to generate vector,
 #'   story and the question data frame.
 #' @export
-lagemaße <- function(seed = sample.int(1e4, 1),
-                     study = lagemaße_davis(seed = seed),
-                     question = lagemaße_question()) {
-    lagemaße2(study$vector, study$story,
+lage <- function(seed = sample.int(1e4, 1),
+                     study = lage_davis(seed = seed),
+                     question = lage_question()) {
+    lage2(study$vector, study$story,
               identifier = paste0("lagemasse", study$name, "S", study$seed),
               question = question)
 }
 
-#' Exercise lagemaße (exam version)
+#' Exercise lage (exam version)
 #'
-#' This is a helper function to create a list of lagemaße exercises for exams.
+#' This is a helper function to create a list of lage exercises for exams.
 #'
 #' @param seeds seeds for exercises
-#' @param question selection from `lagemaße_question()`
+#' @param question selection from `lage_question()`
 #' @return list of Entry rqti objects
 #'
 #' @details This is useful to create parallel versions of the exercise for an
 #'   exam. It always takes the same questions, but varies other aspects of the
 #'   exercise. Long calculations are avoided by not taking variance, sd, mad.
-#'   Currently there is only one lagemaße data creation function, so this is
-#'   taken (lagemaße_davis).
+#'   Currently there is only one lage data creation function, so this is
+#'   taken (lage_davis).
 #'
 #' @export
-lagemaße_klausur <- function(
+lage_klausur <- function(
     seeds,
-    question = lagemaße_question()[c(1:3, sample(c(4, 5, 9), 1))]
+    question = lage_question()[c(1:3, sample(c(4, 5, 9), 1))]
 ) {
-  ex <- lapply(seeds, function(x) lagemaße(study = lagemaße_davis(seed = x),
+  ex <- lapply(seeds, function(x) lage(study = lage_davis(seed = x),
                                            question = question))
   if (length(ex) == 1) ex <- ex[[1]]
   ex
 }
 
-lagemaße_all <- function(seeds = 1:20) {
-  ex <- lagemaße_klausur(seeds, question = lagemaße_question())
+lage_all <- function(seeds = 1:20) {
+  ex <- lage_klausur(seeds, question = lage_question())
   s <- section(ex, selection = 1, visible = F)
   test(s, identifier = "lagemasse_all")
 }
@@ -237,7 +237,7 @@ lagemaße_all <- function(seeds = 1:20) {
 #' generate first section exercises, focusing on simple measures
 #' @return qti object of class Entry with 3 gaps
 s1 <- function(seed) {
-    lagemaße(lagemaße_davis("Körpergewicht", seed = seed),
+    lage(lage_davis("Körpergewicht", seed = seed),
              question = sample(c("Median", "Unteres Quartil", "Oberes Quartil", "Interquartilsabstand", "Range"), 3))
 }
 
@@ -245,7 +245,7 @@ s1 <- function(seed) {
 #' generate second section exercises, focusing on more complex measures.
 #' @return qti object of class entry with 2 gaps
 s2 <- function(seed) {
-    lagemaße(lagemaße_davis("Körpergröße", seed = seed),
+    lage(lage_davis("Körpergröße", seed = seed),
              question = sample(c("Mittelwert", "Varianz", "Standardabweichung",
                                  "Mittlerer absoluter Abstand"), 2))
 }
@@ -253,14 +253,14 @@ s2 <- function(seed) {
 # für studis: vektor-länge, auswahl der statistiken
 # gerade zahl, ungerade zahl, var/sd trennen?
 
-#' Exercise lagemaße (student version)
+#' Exercise lage (student version)
 #'
-#' lagemaße default exercise for students with two sections, each containing 20
+#' lage default exercise for students with two sections, each containing 20
 #' different variants, the first focusing on simple calculations, the second on
 #' more complex ones. One of each section is selected randomly. Stat tables and
 #' formulas are provided, as well as the scientific calculator. This is
 #' OPAL-specific, not tested on other qti platforms.
-lagemaße_studis <- function() {
+lage_studis <- function() {
     s1_list <- lapply(1:20, s1)
     s2_list <- lapply(21:40, s2)
     s1 <- new("AssessmentSection", assessment_item = s1_list, selection = 1,
