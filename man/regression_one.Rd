@@ -5,7 +5,7 @@
 \title{Exercise regression}
 \usage{
 regression_one(
-  seed = sample.int(1000000, 1),
+  seed = sample.int(1e+06, 1),
   study = sample(prep_functions(), 1),
   which_questions = 1:11
 )
