@@ -42,7 +42,7 @@ stattest_one <- function(row, choices) {
   parametrisch <- ifelse(is.na(row$parametric), "", parametrisch)
   hypothesis <- ifelse(row$hypothesis == "unspecific", "Ihre Hypothese ist unspezifisch (Sie haben keine Vorstellung davon welche Mittelwerte in den jeweiligen Gruppen zu erwarten sind).", "Ihre Hypothese ist spezifisch (Sie erwarten bestimmte Mittelwerte in den jeweiligen Gruppen).")
   hypothesis <- ifelse(is.na(row$hypothesis), "", hypothesis)
-  content <- glue::glue("<p>In Ihrer Abschlussarbeit führen Sie eine Untersuchung mit folgendem Design durch:{between}{within}{mixed} {parametrisch} Die AV besitzt ein {row$scalelevel}-Skalenniveau. {hypothesis} Welchen statistischen Test sollten Sie für die Auswertung benutzen? Bitte geben Sie den <b>einfachsten korrekten</b> Test für das <b>höchstmöglich passende</b> Skalenniveau an. Wenn z. B. ein t-Test und eine ANOVA möglich sind, wählen Sie den einfacheren Test, also t-Test.</p>")
+  content <- glue::glue("<p>In Ihrer Abschlussarbeit führen Sie eine Untersuchung mit folgendem Design durch:{between}{within}{mixed} {parametrisch} Die AV besitzt ein {row$scalelevel}-Skalenniveau. {hypothesis} Welchen statistischen Test sollten Sie für die Auswertung benutzen? Bitte geben Sie den <b>einfachsten korrekten</b> Test für das <b>höchstmöglich passende</b> Skalenniveau an. Wenn z. B. ein t-Test und eine ANOVA/Kontrastanalyse möglich sind, wählen Sie den einfacheren Test, also t-Test.</p>")
   choices <- unique(choices)
   sc <- new("SingleChoice", identifier = paste0("stattests_", row$id),
             content = list(content), choices = choices,
