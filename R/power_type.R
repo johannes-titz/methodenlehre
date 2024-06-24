@@ -11,7 +11,7 @@ power_type <- function(seed = sample.int(1e4, 1),
   data <- get_data("power_type_data")
   data <- data[data$question %in% type, ]
   data <- data %>%
-    dplyr::mutate(question = glue::glue("Für Ihre Studie im EmpEx möchten Sie folgenden statistischen Test durchführen: <b>{test}</b>. Welche Größen müssen in diesem Fall (unter anderem) für eine <b>{question}</b>-Power-Analyse festgelegt werden? Wählen Sie alle notwendigen Größen aus. Für jede Teil-Frage bekommen Sie bei korrekter Antwort 0.25 Punkte, bei falscher Antwort -0.25 Punkte, jedoch nie weniger als 0 Punkte insgesamt."))
+    dplyr::mutate(question = glue::glue("Für Ihre Studie im Forschungspraktikum möchten Sie folgenden statistischen Test durchführen: <b>{test}</b>. Welche Größen müssen in diesem Fall (unter anderem) für eine <b>{question}</b>-Power-Analyse festgelegt werden? Wählen Sie alle notwendigen Größen aus. Für jede Teil-Frage bekommen Sie bei korrekter Antwort 0.25 Punkte, bei falscher Antwort -0.25 Punkte, jedoch nie weniger als 0 Punkte insgesamt."))
 
   row <- data %>%
     dplyr::sample_n(1)
