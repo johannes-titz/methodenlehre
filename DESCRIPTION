@@ -30,7 +30,8 @@ Depends:
     mathml (>= 1.2)
 LazyData: true
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    selenider
 Config/testthat/edition: 3
 Collate:
     helpers.R
