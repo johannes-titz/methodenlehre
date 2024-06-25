@@ -261,6 +261,7 @@ anova_one <- function(seed = sample.int(1e5, 1)) {
 #'   than length of seed.
 #' @examples
 #' a <- anova_stud()
+#'
 #' @return rqti test object
 #' @export
 anova_stud <- function(seed = 1:20, selection = 1) {

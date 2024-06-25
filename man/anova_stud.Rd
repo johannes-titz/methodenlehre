@@ -24,4 +24,5 @@ by default.
 }
 \examples{
 a <- anova_stud()
+
 }
