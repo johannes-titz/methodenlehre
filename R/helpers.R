@@ -134,10 +134,12 @@ mlehre <- function(which_exam, sections) {
       files = get_supplement_paths())
 }
 
+#' @export
 mlehreI <- function(sections) {
     mlehre("mlehreI", sections)
 }
 
+#' @export
 mlehreII <- function(sections) {
     mlehre("mlehreII", sections)
 }
