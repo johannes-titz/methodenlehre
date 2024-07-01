@@ -194,6 +194,7 @@ anova_fcritical <- function(tbl)  {
   q <- glue::glue("Was ist der kritische F-Wert für ein Alpha von {alpha}?")
   f <- glue::glue("Der kritische F-Wert muss aus einer entsprechenden Tabelle abgelesen werden für ein Alpha von {alpha} und für die Freiheitsgrade (Zähler und Nenner) von: {tbl[1,1]} und {tbl[2,1]}. Der berechnete Wert auf 3 Dezimalstellen gerundet beträgt: {fcrit}")
   list(q = list("<p>", q, numericGap(fcrit, tolerance = 1,
+                                     response_identifier = "fcrit",
                                      tolerance_type = "absolute"),
                 "</p>"),
        fb = hug_fb(f, q),
