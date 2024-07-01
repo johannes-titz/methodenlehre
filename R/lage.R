@@ -99,24 +99,24 @@ lage_qdf <- function(x) {
 #'
 #' @export
 lage_davis <- function(dv = NULL,
-                           n = NULL,
-                           seed = sample.int(1e3, 1)) {
-    # der erste part ließe sich auslagern in eine funktion vector_davis
-    set.seed(seed)
-    if (is.null(dv)) dv <- sample(c("Körpergröße", "Körpergewicht"), 1)
-    n <- ifelse(is.null(n), sample(c(8, 10, 12), 1), n)
+                       n = NULL,
+                       seed = sample.int(1e3, 1)) {
+  # der erste part ließe sich auslagern in eine funktion vector_davis
+  set.seed(seed)
+  if (is.null(dv)) dv <- sample(c("Körpergröße", "Körpergewicht"), 1)
+  n <- ifelse(is.null(n), sample(c(8, 10, 12), 1), n)
 
-    Davis <- carData::Davis
-    Davis <- Davis %>%
-        na.omit() %>%
-        dplyr::mutate(Körpergröße = weight - repwt,
-               Körpergewicht = height - repht) %>%
-        dplyr::filter(abs(Körpergewicht) <= 10, abs(Körpergröße) <= 10)
-    vector <- Davis %>%
-        dplyr::sample_n(n) %>%
-        dplyr::pull(dv)
-    story <- paste0("<p>Davis (1990) verglich die Körperwahrnehmung von Personen, die keinen oder viel Sport trieben (N=200). Unter anderem erfasste Davis die berichtete Körpergröße und die tatsächliche Körpergröße, sowie das berichtete Körpergewicht und das tatsächliche Körpergewicht. Aus dem Datensatz wurden zufällig ", length(vector), " Personen gezogen. Sie schauen sich die Variable ", names(dv), " an und bestimmen die Differenz zwischen tatsächlichem und berichtetem Wert.</p><p>Differenzen: ", paste0(vector, collapse = " "), "</p><p> Nun wollen Sie einige typische deskriptive Statistiken berechnen. Runden Sie, wenn nötig, auf 1 Dezimalstelle.</p>")
-    tibble::lst(vector, story, seed, name = "Davis")
+  Davis <- carData::Davis
+  Davis <- Davis %>%
+    na.omit() %>%
+    dplyr::mutate(Körpergröße = weight - repwt,
+                  Körpergewicht = height - repht) %>%
+    dplyr::filter(abs(Körpergewicht) <= 10, abs(Körpergröße) <= 10)
+  vector <- Davis %>%
+    dplyr::sample_n(n) %>%
+    dplyr::pull(dv)
+  story <- paste0("<p>Davis (1990) verglich die Körperwahrnehmung von Personen, die keinen oder viel Sport trieben (N=200). Unter anderem erfasste Davis die berichtete Körpergröße und die tatsächliche Körpergröße, sowie das berichtete Körpergewicht und das tatsächliche Körpergewicht. Aus dem Datensatz wurden zufällig ", length(vector), " Personen gezogen. Sie schauen sich die Variable ", dv, " an und bestimmen die Differenz zwischen tatsächlichem und berichtetem Wert.</p><p>Differenzen: ", paste0(vector, collapse = " "), "</p><p> Nun wollen Sie einige typische deskriptive Statistiken berechnen. Runden Sie, wenn nötig, auf 1 Dezimalstelle.</p>")
+  tibble::lst(vector, story, seed, name = "Davis")
 }
 
 #' Create qti item for lage
