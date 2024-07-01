@@ -153,7 +153,7 @@ anova_n_participants <- function(tbl) {
 }
 
 anova_significant <- function(tbl) {
-  p <- tbl$`Pr(>F)`[1]
+  p <- as.numeric(tbl$`Pr(>F)`[1])
   alpha <- sample(c(0.05, 0.01, 0.001), 1)
   q <- glue::glue("Unterscheiden sich die Mittelwerte zwischen den Bedingungen statistisch signifikant voneinander bei einem Alpha von {alpha}? [0=nicht signifkant, 1=signifkant]")
   f <- glue::glue("Wenn {M(p<=alpha)}, ist das Ergebnis statistisch signifikant.")
@@ -168,9 +168,10 @@ anova_f <- function(tbl) {
   sigma <- tbl$`Mean Sq`
   names(sigma) <- c("UV", "res")
   mml <- mml_eq(F <- dfrac(roof(sigma)["UV"], roof(sigma)["res"]), TRUE, round = 3)
-  q1 <- glue::glue("Wie groß ist der F-Wert?")
+  q1 <- glue::glue("Wie groß ist der F-Wert? Runden Sie das Ergebnis auf 3 Dezimalstellen.")
   f1 <- paste("Die mittleren Quadratsummen entsprechen den Varianzschätzungen, deren Verhältnis wiederum den F-Wert bildet:", mml$mml)
-  list(q = list("<p>", q1, numericGap(mml$res, "fvalue"), "</p>"),
+  list(q = list("<p>", q1, numericGap(mml$res, "fvalue", tolerance = 0.05,
+                                      tolerance_type = "relative"), "</p>"),
        fb = hug_fb(f1, q1),
        solution = mml$res)
 }
@@ -181,7 +182,7 @@ anova_varpop <- function(tbl) {
   names(sigma) <- c("UV", "res")
   q <- glue::glue("Wenn die H0 falsch wäre, was wäre dann basierend auf dem ANOVA-Output die beste Schätzung für die Populationsvarianz der abhängigen Variable?")
   f <- paste("Wenn die H0 nicht stimmt, dann lässt sich die Varianz der Mittelwerte zwischen den Gruppen nicht für die Schätzung der Populationsvarianz verwenden. Die beste Schätzung wäre also die durchschnittliche Varianz innerhalb der Gruppen (Mean Sq, Residuals):", sigma["res"])
-  list(q = list("<p>", q, numericGap(as.numeric(sigma["res"]), "varpop"),
+  list(q = list("<p>", q, numericGap(as.numeric(sigma["res"]), "varpop", tolerance = 1, tolerance_type = "relative"),
                 "</p>"),
        fb = hug_fb(f, q),
        solution = as.numeric(sigma["res"]))
@@ -268,7 +269,7 @@ anova_stud <- function(seed = 1:20, selection = 1) {
   x <- lapply(seed, anova_one)
   s <- new("AssessmentSection", visible = FALSE,
            assessment_item = x, selection = selection)
-  test <- new("AssessmentTestOpal", identifier = "anova",
+  test <- new("AssessmentTestOpal", identifier = "anova_stud",
               section = list(s), files = get_supplement_paths(),
               calculator = "scientific")
   test
