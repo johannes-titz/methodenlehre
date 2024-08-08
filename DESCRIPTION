@@ -37,7 +37,7 @@ Collate:
     helpers.R
     anova.R
     bayes.R
-    ca.R
+    einsicht.R
     faktorenanalyse.R
     forschungsprozess.R
     ki-bin.R
