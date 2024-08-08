@@ -131,7 +131,8 @@ mlehre <- function(which_exam, sections) {
       academic_grading = TRUE,
       grade_label = "VORLÄUFIGE Note: ",
       calculator = "scientific",
-      files = get_supplement_paths())
+      files = get_supplement_paths(),
+      time_limit = 90)
 }
 
 #' @export
