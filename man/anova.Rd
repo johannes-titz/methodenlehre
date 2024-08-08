@@ -4,7 +4,7 @@
 \alias{anova}
 \title{anova exercise}
 \usage{
-anova(seeds = sample.int(10000, 1))
+anova(seeds = sample.int(10000, 1), selection = 1:8)
 }
 \arguments{
 \item{seeds}{Seeds for the exercises, can be a single value or a vector for

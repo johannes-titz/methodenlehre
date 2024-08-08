@@ -5,6 +5,8 @@
 \title{Data from opal methodenlehreI course}
 \usage{
 methodenlehreI_data(shortName, path = "data-raw/results/")
+
+methodenlehreI_data(shortName, path = "data-raw/results/")
 }
 \arguments{
 \item{shortName}{Short name of exercise.}
@@ -12,5 +14,7 @@ methodenlehreI_data(shortName, path = "data-raw/results/")
 \item{path}{where to download to}
 }
 \description{
+Data from opal methodenlehreI course
+
 Data from opal methodenlehreI course
 }
