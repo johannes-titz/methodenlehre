@@ -16,6 +16,7 @@ regression_multiple_one <- function(seed = sample.int(1e4, 1)) {
   set.seed(seed)
   prestige <- prepare_prestige(2)
   vars <- names(prestige$data)
+  dv_unit <- c("education" = "Jahre", "women_percent" = "Prozent", "income" = "1000 USD pro Jahr", "prestige" = "z-Werte")[vars[1]]
 
   ivs <- paste(vars[-1], collapse = "+")
   model <- lm(as.formula(paste0(vars[1], "~", ivs)), data = prestige$data)
@@ -38,6 +39,7 @@ regression_multiple_one <- function(seed = sample.int(1e4, 1)) {
   b <- index0::as.index0(coefs)
   beta <- NULL
   beta <- mml_eq(beta[1L] <- b[1L]*dfrac(s["x"], s["y"]), T, round = 2)
+  if (beta$res == 0) warning("Multiple regression exercise: beta is 0, you might want to use a different seed.")
 
   x <- prestige$data[sample(seq(nrow(prestige$data)), 1), 2:3]
   y_hat <- mml_eq(x[1L]*b[1L]+x[2L]*b[2L] + b[0L], T, round = 3)
@@ -76,8 +78,8 @@ regression_multiple_one <- function(seed = sample.int(1e4, 1)) {
                    numericGap(as.numeric(which.max(abs(coef(model_sd)[-1]))), "iv_best", points = 0.5, expected_length = 1, placeholder = ""),
                    paste0("</p><p>Wie groß ist der standardisierte Regressionskoeffizient für ",
                           vars_md[2], "? Runden Sie das finale Ergebnis auf 2 Dezimalstellen."),
-                   numericGap(beta$res, "beta", expected_length = nchar(beta$res),
-                              placeholder = ""),
+                   numericGap(beta$res, "beta", expected_length = nchar(beta$res)+2,
+                              placeholder = "", tolerance = 1, tolerance_type = "relative"),
                    "</p>",
                    q3_text, q3, "</p>")
                    ,
@@ -90,6 +92,6 @@ regression_multiple_stud <- function(seeds = 1:20) {
   ex <- lapply(seeds, regression_multiple)
   s <- section(ex, selection = 2, visible = F)
   test4opal(s, "regression_multiple_stud",
-            calculator = "scientific-calculator",
+            calculator = "scientific",
             files = get_supplement_paths())
 }
