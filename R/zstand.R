@@ -17,7 +17,7 @@ zstand_one <- function(seed = sample.int(1e4, 1)) {
   z <- abs(round(rnorm(1), 2))
   i <- mml_eq(x <- 15L*z + 100L, T, round = 0)
   p <- mml_eq(p <- 1L - pnorm(z), T, flags = list(quote(round(2L))))
-  text <- glue::glue("<p>In gängigen Intelligenz-Theorien gehen Forscher davon aus, dass der IQ normalverteilt ist. Ein Kollege von Ihnen hat bei einem Schüler einen Intelligenztest durchgeführt und nach dem Manual einen {M(z)}-Wert von {z} berechnet. Für ein Gutachten benötigen Sie jedoch den ursprünglichen IQ-Wert. Außerdem müssen Sie abschätzen ob der Schüler als hochbegabt klassifiziert werden kann. Beachten Sie, dass die IQ-Skala im Normalfall einen Mittelwert von 100 und eine Standardabweichung von 15 besitzt.</p>")
+  text <- glue::glue("<p>In gängigen Intelligenz-Theorien gehen Forscher davon aus, dass der IQ normalverteilt ist. Ein Kollege von Ihnen hat bei einem Schüler einen Intelligenztest durchgeführt und nach dem Manual einen {M(z)}-Wert von {z} berechnet. Für ein Gutachten benötigen Sie jedoch den ursprünglichen IQ-Wert. Beachten Sie, dass die IQ-Skala im Normalfall einen Mittelwert von 100 und eine Standardabweichung von 15 besitzt.</p>")
 
   gap1 <- numericGap(round(i$res), "iqvalue", tolerance = 0)
   fb1 <- glue::glue("<p>Der IQ ist üblicherweise so skaliert, dass der Mittelwert 100 und die Standardabweichung 15 beträgt. Man muss die {M(z)}-Standardisierungs-Formel umstellen und bekommt: {i$mml}.</p>")
