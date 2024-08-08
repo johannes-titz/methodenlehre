@@ -29,14 +29,17 @@ anova_example <- function(seed = sample.int(1:1e5, 1)) {
   set.seed(seed)
   stroop <- get_data("stroop")
 
+  df_res <- c(30, 40, 60, 120, 200, seq(20, 30, 2))
+  k <- sample(2:4, 1)
+  n <- df_res/(k-1) + 1
   # within
   within <- stroop %>%
     filter(time == 1) %>%
     select(mode, id, vo2:percent_hrmax,
            reverse_stroop_neutral_test:stroop_interference) %>%
     # vary df_UV
-    filter(mode %in% sample(unique(mode), sample(2:4, 1)),
-           id %in% sample(id, sample(38:48, 1)))
+    filter(mode %in% sample(unique(mode), k),
+           id %in% sample(id, sample(n, 1)))
 
   # participants
 
@@ -52,7 +55,7 @@ anova_example <- function(seed = sample.int(1:1e5, 1)) {
 }
 
 takahashi_story <- function(dv_name) {
-  glue::glue("In der sportpsychologischen Forschung wird der Stroop-Test und seine Varianten häufig verwendet, um die Vorteile von sportlicher Betätigung auf die kognitive Funktion zu untersuchen. Angelehnt an die Studie von Takahashi und Gove (2020) nahmen junge Erwachsene an einem Within-Subjects-Experiment teil, bei dem die Sportart variiert wurde. Nach jeder Sportart absolvierten die Teilnehmer Stroop-Tests in neutraler und inkongruenter Form sowie die Reverse-Stroop-Tests in neutraler und inkongruenter Form. Erfasst wurde die Leistung bei jedem Test, sowie diverse Fitness-Maße. Die folgende ANOVA-Tabelle stellt die Ergebnisse dar, wobei <em>mode</em> die unabhängige Variable (Sportart) ist. Die abhängige Variable ist <em>{dv_name}</em>.")
+  glue::glue("In der sportpsychologischen Forschung wird der Stroop-Test und seine Varianten häufig verwendet, um die Vorteile von sportlicher Betätigung auf die kognitive Funktion zu untersuchen. Angelehnt an die Studie von Takahashi und Gove (2020) nahmen junge Erwachsene an einem Within-Subjects-Experiment teil, bei dem die Sportart variiert wurde. Nach jeder Sportart absolvierten die Teilnehmer Stroop-Tests in neutraler und inkongruenter Form sowie die Reverse-Stroop-Tests in neutraler und inkongruenter Form. Erfasst wurde die Leistung bei jedem Test, sowie diverse Fitness-Maße. Die folgende ANOVA-Tabelle stellt die Ergebnisse dar, wobei <em>mode</em> (Sportart) die unabhängige Variable ist. Die abhängige Variable ist <em>{dv_name}</em>.")
 }
 
 takahashi_explain <- function() {
@@ -225,15 +228,16 @@ anova_questions <- function(tbl, qs_ges) {
 #' @examples
 #' a <- anova()
 #' @export
-anova <- function(seeds = sample.int(1e4, 1)) {
-  ex <- lapply(seeds, anova_one)
+anova <- function(seeds = sample.int(1e4, 1), selection = 1:8) {
+  ex <- lapply(seeds, anova_one, selection)
   if (length(ex) == 1) ex <- ex[[1]]
   ex
 }
 
-anova_one <- function(seed = sample.int(1e5, 1)) {
+anova_one <- function(seed = sample.int(1e5, 1), selection = 1:8) {
   a <- anova_example(seed)
   q <- anova_questions(a$mdl$tbl, a$qs_ges)
+  q <- q[selection]
   questions <- sapply(q, function(x) x$q)
   feedback <- unlist(lapply(q, function(x) textutils::HTMLdecode(x$fb)))
 
