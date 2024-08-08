@@ -27,7 +27,7 @@ fa_example <- function(n_factors_model = sample(2:6, 1)) {
   # png("fa1.png", width = 800, height = 600)
   # psych::cor.plot(data, numbers=TRUE, xlas = 2)
   # dev.off()
-  fa_parallel <- EFAtools::PARALLEL(data, eigen_type = "EFA", method = "ML",
+  fa_parallel <- EFAtools::PARALLEL(data, eigen_type = "PCA", method = "ML",
                                     n_datasets = 100, n_factors = 1)
   # png("fa2.png", width = 800, height = 600)
   # dev.off()
@@ -35,11 +35,12 @@ fa_example <- function(n_factors_model = sample(2:6, 1)) {
   #                                                 mime = "image/png")))
   # img2 <- as.character(htmltools::img(src = base64enc::dataURI(file = "fa2.png",
   #                                                 mime = "image/png")))
-
-  fa <- EFAtools::EFA(data, n_factors_model, method = "ML", rotation = "varimax")
-  h2 <- rowSums(round(fa$rot_loadings, 2)^2)
-  kaiser_num <- length(which(fa_parallel$eigenvalues_EFA[,1] > 1))
-  explained_var <- fa_parallel$eigenvalues_EFA[, 1] / ncol(data)
+  fa <- psych::pca(data, n_factors_model)
+  #fa <- EFAtools::EFA(data, n_factors_model, method = "ML", rotation = "varimax")
+  #h2 <- rowSums(round(fa$rot_loadings, 2)^2)
+  h2 <- rowSums(round(unclass(fa$loadings), 2)^2)
+  kaiser_num <- length(which(fa_parallel$eigenvalues_PCA[,1] > 1))
+  explained_var <- fa_parallel$eigenvalues_PCA[, 1] / ncol(data)
   n_items <- ncol(data)
   tibble::lst(fa_parallel, fa, h2, n_factors_model, data, kaiser_num, n_items,
               explained_var)
@@ -49,7 +50,7 @@ fa_table_parallel <- function(fa_parallel) {
   # n_extract_factors <- sample(1:sum(fa_parallel$pc.values > 1), 1)
   # lim95 <- apply(fa_parallel$values, 2,function(x) quantile(x, .95))
   # tbl <- data.frame(cbind(eigenvalue = fa_parallel$pc.values, pa95limit = lim95))
-  tbl <- fa_parallel$eigenvalues_EFA
+  tbl <- fa_parallel$eigenvalues_PCA
   kableExtra::kable_styling(
     full_width=F, position = "left",
     kable_input = kable(round(tbl, 2), booktabs = T,
@@ -60,9 +61,9 @@ fa_table_parallel <- function(fa_parallel) {
 }
 
 fa_table2 <- function(myfa) {
-  rot_loadings <- myfa$rot_loadings
-  rot_loadings <- rot_loadings#[, order(colnames(rot_loadings))]
-  output <- round(cbind(`Item Nummer` = 1:length(myfa$h2),
+  rot_loadings <- unclass(myfa$loadings)# myfa$rot_loadings
+  #rot_loadings <- rot_loadings#[, order(colnames(rot_loadings))]
+  output <- round(cbind(`Item Nummer` = 1:length(myfa$communality),
                         rot_loadings), 3)
   row.names(output) <- NULL
   tbl <-tbl <- kableExtra::kable_styling(
@@ -92,7 +93,7 @@ faktorenanalyse <- function(seeds = sample.int(1e4, 1)) {
 faktorenanalyse_one <- function(seed = sample.int(1e5, 1)) {
   set.seed(seed)
   fa <- fa_example()
-  eigenvalues <- fa$fa$vars_accounted_rot[1,]
+  eigenvalues <- fa$fa$Vaccounted[1,] #fa$fa$vars_accounted_rot[1,]
   names(eigenvalues) <- paste0("F", seq(eigenvalues))
   eigenvalues_table <- kableExtra::kable_styling(
     kable_input = kable(eigenvalues, booktabs = T,
@@ -101,7 +102,7 @@ faktorenanalyse_one <- function(seed = sample.int(1e5, 1)) {
                         col.names = c("Faktor", "Eigenwert")), full_width = F,
     position = "left")
 
-  p1 <- glue::glue("<p>Der berühmte Psychologe Thurstone hat im Jahr 1941 eine Studie zu Intelligenz durchgeführt, die Sie versuchen zu replizieren. Sie erheben Daten zu verschiedenen Intelligenz-Aufgaben bei {nrow(fa$data)} Probanden und möchten diese zunächst mit Hilfe einer explorativen Faktorenanalyse auswerten.</p><p>
+  p1 <- glue::glue("<p>Der berühmte Psychologe Thurstone hat im Jahr 1941 eine Studie zu Intelligenz durchgeführt, die Sie versuchen zu replizieren. Sie erheben Daten zu verschiedenen Intelligenz-Aufgaben bei {fa$fa$n.obs} Probanden und möchten diese zunächst mit Hilfe einer explorativen Faktorenanalyse auswerten.</p><p>
 
 Die folgende Tabelle zeigt die Eigenwerte und das 95%-Quantil der zufällig erzeugten Eigenwerte einer Parallel-Analyse (PA):</p>
 
@@ -111,7 +112,7 @@ Die folgende Tabelle zeigt die Eigenwerte und das 95%-Quantil der zufällig erze
 
   q1 <- new("NumericGap", response_identifier = "kaiser", solution = fa$kaiser_num)
   p2 <- "</p><p>Wie viele Faktoren sollten nach der Parallelanalyse extrahiert werden?"
-  q2 <- new("NumericGap", response_identifier = "pa", solution = fa$fa_parallel$n_fac_EFA)
+  q2 <- new("NumericGap", response_identifier = "pa", solution = fa$fa_parallel$n_fac_PCA)
   which_fac <- sample(seq(fa$n_factors_model), 1)
   p3 <- glue::glue("</p><p>Wie viel Varianz wird durch Faktor {which_fac} erklärt? Geben Sie den Wert als Dezimalzahl an (z. B. <b>0.43</b> für 43%) und runden Sie auf 2 Dezimalstellen.")
 
@@ -151,7 +152,7 @@ fa_feedback <- function(h2_item, h2, n_factors_model, n_items, eigenvalue) {
 faktorenanalyse_stud <- function(seeds = 1:20) {
   exercises <- parallel::mclapply(seeds, faktorenanalyse_one)
   section <- new("AssessmentSection", assessment_item = exercises, selection = 1)
-  test <- new("AssessmentTestOpal", identifier = "faktorenanalyse",
-              section = list(section), calculator = "scientific-calculator",
+  test <- new("AssessmentTestOpal", identifier = "faktorenanalyse_stud",
+              section = list(section), calculator = "scientific",
               files = get_supplement_paths())
 }
