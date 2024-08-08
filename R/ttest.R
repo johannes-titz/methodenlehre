@@ -75,7 +75,7 @@ ttest_sig <- function(ttest_data) {
 
 ttest_krit <- function(ttest_data) {
   alpha <- ttest_data$alpha
-  q <- glue::glue("Was ist der kritische t-Wert bei einem Alpha von {alpha}. Wenn sie mehrere t-Werte angeben möchten, geben Sie nur den kleineren an.")
+  q <- glue::glue("Was ist der kritische t-Wert bei einem Alpha von {alpha}. Wenn Sie mehrere t-Werte angeben möchten, geben Sie nur den kleineren an.")
   df <- ttest_data$df
   fb <- fb_critical_t(ttest_data$result$hypothesis, ttest_data$result$mml,
                       ttest_data$result$critical_t,
