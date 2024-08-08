@@ -86,7 +86,7 @@ ki_bin_stud <- function(seeds = 1:20) {
   s <- new("AssessmentSection", assessment_item = ex, selection = 1)
   new("AssessmentTestOpal", identifier = "ki_bin_stud",
       title = "Konfidenzintervall",
-      section = list(s), calculator = "scientific-calculator",
+      section = list(s), calculator = "scientific",
       files = get_supplement_paths())
 }
 

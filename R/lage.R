@@ -270,6 +270,6 @@ lage_studis <- function() {
     test <- new("AssessmentTestOpal", section = list(s1, s2),
                 identifier = "lagemasse",
                 files = get_supplement_paths(),
-                calculator = "scientific-calculator")
+                calculator = "scientific")
     test
 }
