@@ -3,7 +3,8 @@ library(tidyr)
 tbl <- tbl %>%
   mutate(rows_id = rownames(tbl), cols_id = abbreviate(zuordnung)) %>%
   mutate_all(function(x) ifelse(is.na(x), 0, x)) %>%
-  transmute(cols = as.factor(zuordnung), rows = Aussage, rows_id, cols_id,
+  transmute(cols = as.factor(zuordnung), rows = Aussage, rows_id,
+            cols_id = as.factor(cols_id),
             points = punkte)
 
 wt <- tbl
