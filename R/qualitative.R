@@ -5,7 +5,7 @@ qualitative_aussagen <- function() {
 
   p3 <- list("<p>", new("TextGapOpal", response_identifier = "triangulation", solution = c("Triangulation"), tolerance = 3, placeholder = "1 Wort"), " bezieht sich auf die Anwendung verschiedener Methoden oder Datenquellen, um die Verlässlichkeit und Validität der Forschungsergebnisse zu stärken. Durch die Kombination von beispielsweise Interviews, Beobachtungen und Analysen von Dokumenten erhalten Forscher ein umfassenderes Bild des untersuchten Phänomens.</p>")
 
-  p4 <- list("<p>", new("TextGapOpal", response_identifier = "codieren", solution = c("Codieren", "Kodieren"), tolerance = 2, placeholder = "1 Wort"), " ist ein zentraler Schritt in der Analyse qualitativer Daten. Hier werden Muster, Themen und Kategorien aus den gesammelten Informationen abgeleitet. Durch diesen Prozess werden die Daten in interpretierbare Einheiten zerlegt, was es ermöglicht, Bedeutungen zu entdecken und Theorien zu entwickeln.</p>")
+  p4 <- list("<p>", new("TextGapOpal", response_identifier = "codieren", solution = c("Codieren", "Kodieren", "Kodierung", "Codierung"), tolerance = 2, placeholder = "1 Wort"), " ist ein zentraler Schritt in der Analyse qualitativer Daten. Hier werden Muster, Themen und Kategorien aus den gesammelten Informationen abgeleitet. Durch diesen Prozess werden die Daten in interpretierbare Einheiten zerlegt, was es ermöglicht, Bedeutungen zu entdecken und Theorien zu entwickeln.</p>")
 
   list(p1, p2, p3, p4)
 }
