@@ -38,11 +38,14 @@ Collate:
     anova.R
     bayes.R
     ca.R
+    eda.R
     einsicht.R
     faktorenanalyse.R
     forschungsprozess.R
+    ka-sc.R
     ki-bin.R
     lage.R
+    loess.R
     metaanalyse.R
     methodenguru.R
     methodenlehre.R
