@@ -377,6 +377,6 @@ regression_stud <- function(seeds = 1:20) {
   s <- new("AssessmentSection", assessment_item = ex, selection = 1)
   test <- new("AssessmentTestOpal", identifier = "regression",
               section = list(s), files = get_supplement_paths(),
-              calculator = "scientific-calculator")
+              calculator = "scientific")
   test
 }
