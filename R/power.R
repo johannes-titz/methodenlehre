@@ -1,3 +1,7 @@
+# todo
+# - randomnize which area is given
+# - change points, first four questions should be 0.5 points
+
 power_data <- function() {
   df <- c(seq(16, 100, 2), seq(1016, 1100, 2))
   es_d <- seq(0.2, 1.5, 0.1)
@@ -19,7 +23,7 @@ power_data <- function() {
   mml_n <- mml_eq(n <- df + 2L, T)
   mml_d <- mml_eq(d <- dfrac(2L*t, sqrt(df)), T)
 
-  x <- seq(-10, 10, 0.001)
+  x <-  seq(-10, 10, 0.001)
   density_null <- dt(x, df)
   df_null <- data.frame(x = x, y = density_null, hypothesis = "null")
   density_alternative <- dt(x, df, ncp = t)
@@ -70,8 +74,10 @@ power_plot <- function(d, criterion, alpha, beta) {
   p2 <- p +
     geom_ribbon(aes(ymin=0, ymax=y*!case), alpha = 0.7) +
   #  annotate(geom = "text", x=criterion*c(0.8, 1.2), y = 0.01, label = c(1-alpha, 1-beta)) +
-    scale_fill_manual(name = "Anteil Fläche", breaks = c("alternativeAbove_criterion", "nullBelow_criterion"),
-                      values = rep(c(col1, col2), 2), # c("#d8b365", "#5ab4ac", "#d8b365", "#5ab4ac"),
+    scale_fill_manual(name = "Anteil Fläche",
+                      breaks = c("alternativeAbove_criterion", "nullBelow_criterion"),
+                      values = rep(c(col1, col2), 2),
+                      # c("#d8b365", "#5ab4ac", "#d8b365", "#5ab4ac"),
     labels = c(as.character(c(1-beta, 1-alpha))))
 
   #s <- svglite::svgstring(standalone = F)
@@ -79,8 +85,8 @@ power_plot <- function(d, criterion, alpha, beta) {
   #print(final_plot)
   #s()
   tf1 <- tempfile(fileext = ".png")
-  ggsave(tf1, final_plot, width = 10*0.7, height = 8*0.7, dpi = "print",
-         device=ragg::agg_png)
+  ggsave(tf1, final_plot, width = 10*0.5, height = 8*0.5, dpi = 150,
+         device=ragg::agg_png, scale = 1)
   imgfile2tag(tf1)
 }
 
@@ -111,7 +117,7 @@ power_qdf <- function(alpha, beta, d, n) {
   names(df) <- c("question", "solution", "id", "tolerance")
   df$tolerance_type <- "relative"
   df$expected_length <- 2
-  df2gap(df)
+  df
 }
 
 #```{r echo=F, eval=F}
@@ -121,23 +127,20 @@ power_qdf <- function(alpha, beta, d, n) {
 #N
 #```
 
-power_fb <- function(mml_d, mml_n) {
-  glue::glue(
-  "<p>2 Wahrscheinlichkeiten sind immer gegeben, die anderen 2 ergeben sich auch der Gegenwahrscheinlichkeit. In den ersten vier Fragen geht es nur um die richtige Zuordnung der Wahrscheinlichkeiten zu den Parametern.</p>
-<p>
-1. Alpha ist die Fläche über dem Kriterium der Nullhypothesen-Verteilung (über der linken Verteilung).
-</p><p>
-2. 1-Alpha ist die Fläche unter dem Kriterium der Nullhypothesen-Verteilung (unter der linken Verteilung).
-</p><p>
-3. Beta ist die Fläche unter dem Kriterium der Alternativhypothesen-Verteilung (unter der rechten Verteilung).
-</p><p>
-4. Die Power ist die Fläche über dem Kriterium der Alternativhypothesen-Verteilung (über der rechten Verteilung).
-</p><p>
-Fragen 5 und 6 lassen sich über die Formelsammlung lösen:
-</p><p>
-5. Bei gleich großen Stichproben gilt approximativ: {mml_d}
-</p><p>
-6. Pro Mittelwert reduzieren sich die Freiheitsgrade um 1. Da es hier zwei Gruppen gibt gilt also {mml_n}")
+power_fb <- function(mml_d, mml_n, selection = power_selection()) {
+  intro <- as.character(htmltools::p("Zwei Wahrscheinlichkeiten sind immer gegeben, die anderen zwei ergeben sich auch der Gegenwahrscheinlichkeit. Es geht also nur um die richtige Zuordnung der Wahrscheinlichkeiten zu den Parametern."))
+
+  fb <- c(
+    alpha = "Alpha ist die Fläche über dem Kriterium der Nullhypothesen-Verteilung (über der linken Verteilung).",
+    one_minus_alpha = "1-Alpha ist die Fläche unter dem Kriterium der Nullhypothesen-Verteilung (unter der linken Verteilung).",
+    beta = "Beta ist die Fläche unter dem Kriterium der Alternativhypothesen-Verteilung (unter der rechten Verteilung).",
+    power = "Die Power ist die Fläche über dem Kriterium der Alternativhypothesen-Verteilung (über der rechten Verteilung).",
+    d = glue::glue("Bei gleich großen Stichproben gilt laut Formelsammlung approximativ: {mml_d}"),
+    N_from_df = glue::glue("Pro Mittelwert reduzieren sich die Freiheitsgrade um 1 (siehe Formelsammlung). Da es hier zwei Gruppen gibt gilt also {mml_n}")
+  )
+  fb <- fb[selection]
+  fb <- as.character(unlist(Map(hug_fb, fb, paste("Frage", seq(fb)))))
+  as.list(c(intro, fb))
 }
 
 #' Exercise power
@@ -146,22 +149,30 @@ Fragen 5 und 6 lassen sich über die Formelsammlung lösen:
 #'
 #' @return Entry object
 #' @export
-power <- function(seeds = sample.int(1e4, 1)) {
-  ex <- parallel::mclapply(seeds, power_one)
+power <- function(seeds = sample.int(1e4, 1), selection = power_selection()) {
+  ex <- lapply(seeds, power_one, selection = selection)
   if (length(ex) == 1) ex <- ex[[1]]
   ex
 }
 
-power_one <- function(seed = sample.int(1e4, 1)) {
+power_selection <- function() {
+  c("alpha", "one_minus_alpha", "beta", "power", "d", "N_from_df")
+}
+
+power_one <- function(seed = sample.int(1e4, 1),
+                      selection = power_selection()) {
   set.seed(seed)
   d <- power_data()
   plot_string <- power_plot(d$d, d$criterion, d$alpha, d$beta)
   story <- (power_story(d$t, d$df))
-  fb <- power_fb(d$mml_d$mml, d$mml_n$mml)
-  q_list <- power_qdf(d$alpha, d$beta, d$mml_d$res, d$mml_n$res)
+  fb <- power_fb(d$mml_d$mml, d$mml_n$mml, selection = selection)
+  q_df <- power_qdf(d$alpha, d$beta, d$mml_d$res, d$mml_n$res)
+  q_df <- q_df[q_df$id %in% selection,]
+  q_list <- df2gap(q_df)
   content <- list(story, plot_string)
   content <- append(content, q_list, 3)
-  entry <- new("Entry", identifier = paste0("power", seed), content = content)
+  entry <- new("Entry", identifier = paste0("power", seed), content = content,
+                 feedback = list(modalFeedback(fb)))
 }
 
 power_stud <- function(seeds = 1:20) {
