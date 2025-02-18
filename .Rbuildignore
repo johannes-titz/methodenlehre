@@ -7,3 +7,6 @@
 ^supplements\.sh$
 ^.*\.pdf$
 ^scratchpad\.R$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
