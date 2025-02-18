@@ -112,7 +112,8 @@ regression_example <- function(prepare_function, seed) {
 
     variables <- names(data)
     variables_md <- paste0("<em>", names(data), "</em>")
-    model <- lm(data)
+    model <- lm(as.formula(paste0(variables[1], "~", variables[2])),
+                data = data)
     model_sd <- lm.beta::lm.beta(model)
 
     story <- paste0(story, "<p>Sie berechnen eine Regression zwischen ", variables_md[2], " und ", variables_md[1], " und erstellen eine Abbildung:</p>")
@@ -140,7 +141,8 @@ get_html_table <- function(model, sem) {
     show.stat = T,
     show.p = T,
     show.fstat = T, show.df = F, show.r2 = F, digits.p = 3,
-    show.std = T, string.pred = "Predictor", string.est = "b",
+    #show.std = T,
+    string.pred = "Predictor", string.est = "b",
     string.se = "SE (b)", string.std = "beta",
     string.std_se = "SE (beta)", string.stat = "t-Wert",
     emph.p = F,
@@ -320,6 +322,12 @@ get_questions <- function(parameters, variables_md) {
   df
 }
 
+regression_which_questions <- function() {
+  c("cor", "b", "beta", "intercept",
+    "sig", "sem", "ci_ll", "ci_ul",
+    "yhat", "resid", "r2")
+}
+
 #' Exercise regression
 #'
 #' In this exercise the student gets a regression table and graphic and must
@@ -331,11 +339,12 @@ get_questions <- function(parameters, variables_md) {
 #' @return rqti Entry object
 regression_one <- function(seed = sample.int(1e6, 1),
                            study = sample(prep_functions(), 1),
-                           which_questions = 1:11) {
+                           which_questions = regression_which_questions()) {
   set.seed(seed)
   ex <- regression_example(study, seed)
   content <- prepare_html(ex)
-  q <- get_questions(ex$parameters, ex$variables_md)[which_questions, ]
+  q <- get_questions(ex$parameters, ex$variables_md)
+  q <- q[q$id %in% which_questions, ]
   questions <- df2gap(q)
   feedback <- new("ModalFeedback", title = "Feedback",
                   content = list(paste("<p><details><summary>", q$question, "</summary>",
@@ -357,7 +366,7 @@ regression_one <- function(seed = sample.int(1e6, 1),
 #' @export
 regression <- function(seeds = sample.int(1e6, 1),
                        study = sample(prep_functions(), 1),
-                       which_questions = 1:11) {
+                       which_questions = regression_which_questions()) {
   ex <- lapply(seeds, regression_one, which_questions = which_questions)
   if (length(ex) == 1) ex <- ex[[1]]
   ex
