@@ -38,6 +38,7 @@ Collate:
     anova.R
     bayes.R
     ca.R
+    cmt.R
     eda.R
     einsicht.R
     faktorenanalyse.R
